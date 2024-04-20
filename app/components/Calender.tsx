@@ -1,7 +1,13 @@
 "use client";
 import React, {useMemo, useState } from "react";
+import { PopupDetails } from "./PopupDetails";
 
-export default function Calendar({abscent_days}:{abscent_days: string[]}) {
+type LeaveType = {
+  date: string;
+  type: "holiday" | "abscent" | "leave" | "weekend";
+  cause: string | null;
+}
+export default function Calendar({leave_days}:{leave_days:LeaveType[] }) {
   const currentDate = new Date();
   let currentYear = currentDate.getFullYear();
   let currentMonth = currentDate.getMonth();
@@ -15,11 +21,14 @@ export default function Calendar({abscent_days}:{abscent_days: string[]}) {
     months: [],
     years: []
    }
-   abscent_days.map(dateString => {
-        const parts = dateString.split('-'); // Split the string by '-'
+   leave_days.map(dateString => {
+    if (dateString.cause) {
+      const parts = dateString.date.split('-'); // Split the string by '-'
         AbscentDetails.days.push(parseInt(parts[0], 10)); // Parse the second part (days) as an integer
         AbscentDetails.months.push(parseInt(parts[1], 10)); // Parse the second part (months) as an integer
         AbscentDetails.years.push(parseInt(parts[2], 10)); // Parse the second part (years) as an integer
+    }
+        
     });
     return AbscentDetails;
   },[])
@@ -46,6 +55,21 @@ export default function Calendar({abscent_days}:{abscent_days: string[]}) {
   // Calculate the day of the week for the first day of the month (0 - Sunday, 1 - Monday, ..., 6 - Saturday)
   const firstDayOfWeek = new Date(year, month, 1).getDay();
 
+  const dayColors = (status: LeaveType["type"]) => {
+    switch (status) {
+      case "abscent":
+        return "bg-red-500 bg-opacity-5 text-red-500"
+      case "holiday":
+        return "bg-gray-500 bg-opacity-5 text-gray-500"
+      case "weekend":
+        return "bg-gray-500 bg-opacity-5 text-gray-500"
+      case "leave":
+        return "bg-orange-700 bg-opacity-5 text-red-500"
+      default:
+        return null;
+
+    }
+  }
 
   const memoEmptyBoxes = useMemo(() =>
     Array.from({ length: firstDayOfWeek }, (_, index) => (
@@ -61,15 +85,27 @@ export default function Calendar({abscent_days}:{abscent_days: string[]}) {
 
         // Check if this date is Abscent 
         const formattedDate = `${dayOfMonth <10? `0${dayOfMonth}`: dayOfMonth}-${month <10? `0${month+1}`: month+1}-${year}`;
-        const isAbscent = abscent_days.indexOf(formattedDate) + 1>0? true:false;
+        const foundLeaveDay = leave_days.find(leaveDay => leaveDay.date === formattedDate);
+        const isAbscent = {
+          status: foundLeaveDay,
+          type: foundLeaveDay && foundLeaveDay.type,
+          cause: foundLeaveDay && foundLeaveDay.cause && foundLeaveDay.cause 
+        } ;
 
         // Check if this date is weekend for "Friday", "SaturDay" 
-        const data = (((firstDayOfWeek+1) +dayOfMonth)%7);
-        const isWeekend = data===0||data===1
+        // const data = (((firstDayOfWeek+1) +dayOfMonth)%7);
+        // const isWeekend = data===0||data===1
         return (
-          <div key={index} className={`text-center py-2 border cursor-pointer ${isCurrentDate ? 'bg-blue-500 text-white' : isAbscent ? 'bg-red-500 text-white': isWeekend && "bg-gray-500 bg-opacity-5 text-gray-500"}`}>
+          <PopupDetails
+          title={isAbscent.status && isAbscent.type || "Presents"}
+          description={`He/She is ${isAbscent.status && isAbscent.type || "Presents"} on ${formattedDate}`}
+          status={isAbscent.status && isAbscent.type? isAbscent.type: "presents"}
+          >
+            <div key={index} className={`text-center py-2 border cursor-pointer ${isCurrentDate ? 'bg-blue-500 text-white' : isAbscent.status && isAbscent.type ?  dayColors(isAbscent.type):''}`}>
             {dayOfMonth}
           </div>
+          </PopupDetails>
+          
         );
       }), [month, daysInMonth, currentDate, year]);
 
@@ -103,7 +139,7 @@ const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
               Next
             </button>
           </div>
-          <div className="grid grid-cols-7 gap-2 p-4" id="calendar">
+          <div className="grid grid-cols-7 gap-2 p-4">
             {/* Calendar Days Go Here */}
 
             {daysOfWeek.map((day) => (
@@ -116,26 +152,7 @@ const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
             {memoBoxesOfDays}
           </div>
-          <div
-            id="myModal"
-            className="modal flex hidden fixed inset-0  items-center justify-center z-50"
-          >
-            <div className="modal-overlay absolute inset-0 bg-black opacity-50" />
-            <div className="modal-container bg-white w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
-              <div className="modal-content py-4 text-left px-6">
-                <div className="flex justify-between items-center pb-3">
-                  <p className="text-2xl font-bold">Selected Date</p>
-                  <button
-                    id="closeModal"
-                    className="modal-close px-3 py-1 rounded-full bg-gray-200 hover:bg-gray-300 focus:outline-none focus:ring"
-                  >
-                    ✕
-                  </button>
-                </div>
-                <div id="modalDate" className="text-xl font-semibold" />
-              </div>
-            </div>
-          </div>
+          
         </div>
       </div>
     </div>
