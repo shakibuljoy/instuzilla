@@ -14,10 +14,18 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { loginFormSchema } from "@/utils/formSchema";
 import AuthContext from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 
 export default function page() {
+  // Getting authentication context
   const {signIn, user, error} = useContext(AuthContext);
+  // Checking the state of user 
+  const router = useRouter();
+  if(user){
+    return router.push('/')
+  }
+  // Creating form resolver using zodResolver
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -34,10 +42,10 @@ export default function page() {
   }
   return (
     <>
-    {user ? (<h1>{user}</h1>):(<h1>Shade</h1>)}
+    {user? (<h1>{user}</h1>):(<h1>Shade</h1>)}
     {error?.length >0 && (<h1>{error}</h1>)}
       
-      <div className="w-96 items-center border border-indigo-100 bg-slate-50 rounded-sm shadow-xl mx-auto p-4" >
+      <div className="w-96 items-center border border-indigo-500 bg-slate-50 rounded-sm shadow-xl mx-auto p-4" >
         <h3 className="text-md" >Login</h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
