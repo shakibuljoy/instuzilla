@@ -1,7 +1,7 @@
 "use client";
-import { loginUser } from "@/utils/fetchUser";
+import { gettingUser, loginUser, updateUser } from "@/utils/fetchUser";
 import { loginFormSchema } from "@/utils/formSchema";
-import React, { createContext, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { z } from "zod";
 
@@ -40,7 +40,18 @@ export const AuthenticationProvider = ({
   const [error, setError] = useState("");
   const [token, setToken] = useState<LoginResponse | null>(null);
 
-
+  useEffect(() => {
+    const getUser = async () => {
+      const data = await gettingUser()
+      if(data){
+        
+      setUser(data)
+      }else{
+        await updateUser()
+      }
+    }
+    getUser();
+  })
   const signIn = (credentials: z.infer<typeof loginFormSchema>) => {
     const userData = loginUser(credentials).then((response) => {
       if (response as LoginResponse){
