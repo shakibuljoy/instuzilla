@@ -16,7 +16,7 @@ import { useContext } from "react"
 import AuthContext from "../context/AuthContext"
 export default function Header() {
 
-  const {user} = useContext(AuthContext)
+  const {user, logOut} = useContext(AuthContext)
   
   return (
       <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
@@ -134,7 +134,14 @@ export default function Header() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem>
+                {user ? (
+                  <button onClick={logOut}>LogOut</button>
+                ): (
+                  <Link href={'/authentication/login'} >SignIn</Link>
+                )}
+                
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>

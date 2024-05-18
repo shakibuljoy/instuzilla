@@ -1,7 +1,7 @@
 "use client";
 
 import { z } from "zod";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, 
@@ -22,9 +22,12 @@ export default function page() {
   const {signIn, user, error} = useContext(AuthContext);
   // Checking the state of user 
   const router = useRouter();
-  if(user){
-    return router.push('/')
-  }
+  useEffect(() => {
+    if(user){
+      return router.push('/')
+    }
+  }, [user])
+  
   // Creating form resolver using zodResolver
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),

@@ -1,6 +1,6 @@
 'use server'
-import {z} from 'zod'
-import { loginFormSchema } from './formSchema'
+import {SafeParseReturnType, z} from 'zod'
+import { loginFormSchema, signupFormSchema } from './formSchema'
 import { cookies } from 'next/headers'
 
 interface LoginResponse {
@@ -42,6 +42,35 @@ export const loginUser = async (credentals:z.infer<typeof loginFormSchema>) => {
         
 }   
 
+
+export const registerUser = async (credentals:z.infer<typeof signupFormSchema>) => {
+    const cookieStore = cookies();
+    const token = cookieStore.get('token')?.value || null;
+    if (token){
+        const parsedData = signupFormSchema.safeParse(credentals) !== undefined && signupFormSchema.safeParse(credentals);
+        if(parsedData){
+            const response = await fetch(`${baseUrl}/api/register/`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(parsedData.data)
+            }).catch(err => {throw new Error(err)})
+            // if (response.ok && response.status===201){
+            //     const data = await response.json()
+            //     return data;
+            // }else{
+            //     cookieStore.delete('token');
+            //     return response;
+            // }
+            const data = await response.json()
+            return data
+        }
+        }
+        
+    return null;
+}
 
 export const gettingUser = async () => {
     const cookieStore = cookies();
@@ -99,4 +128,17 @@ export const updateUser = async () => {
         }
     }
     return null;
+}
+
+export const logOutUser = () => {
+    const cookieStore = cookies();
+    const token = cookieStore.get('refresh')?.value || null;
+
+    if(token){
+        cookieStore.delete('refresh')
+        cookieStore.delete('token')
+        return true;
+    }else{
+        return false;
+    }
 }

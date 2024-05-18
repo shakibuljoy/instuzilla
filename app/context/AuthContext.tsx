@@ -1,5 +1,5 @@
 "use client";
-import { gettingUser, loginUser, updateUser } from "@/utils/fetchUser";
+import { gettingUser, logOutUser, loginUser, updateUser } from "@/utils/fetchUser";
 import { loginFormSchema } from "@/utils/formSchema";
 import React, { createContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
@@ -24,11 +24,13 @@ const AuthContext = createContext<{
   token: LoginResponse | null;
   user: string | null;
   error: string;
+  logOut: () => boolean;
 }>({
   signIn: async () => {},
   token: null,
   error: "",
   user: null,
+  logOut: () => false,
 });
 
 export const AuthenticationProvider = ({
@@ -67,8 +69,18 @@ export const AuthenticationProvider = ({
       setError(err.message)
     });
   };
+
+  const logOut = () => {
+    const loggingOut = logOutUser();
+    if (loggingOut){
+      setUser(null);
+
+      return logOutUser();
+    }
+    return false;
+  }
   return (
-    <AuthContext.Provider value={{ signIn, token, error, user }}>
+    <AuthContext.Provider value={{ signIn, token, error, user, logOut }}>
       {children}
     </AuthContext.Provider>
   );
