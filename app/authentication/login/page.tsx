@@ -45,7 +45,7 @@ export default function page() {
   }
   return (
     <>
-    {user? (<h1>{user}</h1>):(<h1>Shade</h1>)}
+    {user? (<h1>{user.name}</h1>):(<h1>Shade</h1>)}
     {error?.length >0 && (<h1>{error}</h1>)}
       
       <div className="w-96 items-center border border-indigo-500 bg-slate-50 rounded-sm shadow-xl mx-auto p-4" >

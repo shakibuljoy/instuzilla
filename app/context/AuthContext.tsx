@@ -18,11 +18,12 @@ interface JwtCustomePayload {
   iat?: number;
   jti?: string;
   name: string;
+  type: string;
 }
 const AuthContext = createContext<{
   signIn: (credentials: z.infer<typeof loginFormSchema>) => void;
   token: LoginResponse | null;
-  user: string | null;
+  user: {name: string | null, user_type: string | null} | null;
   error: string;
   logOut: () => boolean;
 }>({
@@ -38,7 +39,7 @@ export const AuthenticationProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] = useState<string | null>(null);
+  const [user, setUser] = useState<{name: string | null, user_type: string | null} | null>(null);
   const [error, setError] = useState("");
   const [token, setToken] = useState<LoginResponse | null>(null);
 
@@ -46,20 +47,22 @@ export const AuthenticationProvider = ({
     const getUser = async () => {
       const data = await gettingUser()
       if(data){
-        
-      setUser(data)
+        setUser(data)
       }else{
         await updateUser()
       }
     }
     getUser();
-  })
+  },[])
   const signIn = (credentials: z.infer<typeof loginFormSchema>) => {
     const userData = loginUser(credentials).then((response) => {
       if (response as LoginResponse){
         setError("");
       const decoded = jwtDecode<JwtCustomePayload>(response.access);
-      setUser(decoded.name ? decoded.name : null);
+      setUser({
+        name: decoded.name ? decoded.name : null,
+        user_type: decoded.type ? decoded.type : null,
+      });
       setToken(response);
       }else{
         setError("Invalid Credentials!")

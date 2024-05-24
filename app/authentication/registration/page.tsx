@@ -1,12 +1,11 @@
 "use client";
 
-import { SafeParseReturnType, z } from "zod";
-import React, { useState } from "react";
+import { z } from "zod";
+import React, { useState, useContext, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, 
     FormControl,
-    FormDescription,
     FormField,
     FormItem,
     FormLabel,
@@ -16,10 +15,31 @@ import { Button } from "@/components/ui/button";
 import { signupFormSchema } from "@/utils/formSchema";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { registerUser } from "@/utils/fetchUser";
+import AuthContext from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast";
 
 
 export default function page() {
-    const [status, setStatus] = useState(false);
+    const [status, setStatus] = useState("");
+    const [loading, setLoading] = useState(false);
+    const {user} = useContext(AuthContext);
+    const {toast} = useToast();
+    const router = useRouter()
+
+    
+
+    useEffect(() => {
+      if (user?.user_type === 'student' || user?.user_type == 'teacher'){
+        console.log(user)
+        toast({
+          variant: "destructive",
+          title: "Heads Up!",
+          description: "You don't have permission to register a new user!"
+        })
+        return router.push("/")
+      }
+    }, [user])
   // Creating form resolver using zodResolver
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
@@ -37,21 +57,25 @@ export default function page() {
 
   // 2. Define a submit handler.
  async function onSubmit(data: z.infer<typeof signupFormSchema>) {
-    
+      setLoading(true);
     
       const registration = await registerUser(data)
-    if (registration){
-        setStatus(true);
+    if (registration && registration.status === 201){
+        setStatus("User Created Successfully");
+        
+        setLoading(false)
+        return;
     }
-    console.log(registration)
+    setLoading(false);
+    setStatus(prev => registration)
     
-   console.log("Submitted", data)
+   console.log("Submitted")
   }
-  if(status){
+  if(status && status.length > 0){
     return (
       <>
-      <h1>User Created Successfully</h1>
-      <Button className="text-center w-24 p-2 align-middle items-center" size='sm' onClick={() => setStatus(false)}>
+      <h1>{status}</h1>
+      <Button className="text-center w-24 p-2 align-middle items-center" size='sm' onClick={() => setStatus("")}>
       Add another
       </Button>
       </>
@@ -76,11 +100,14 @@ export default function page() {
                       <Select onValueChange={field.onChange} defaultValue={field.value} >
                           <FormControl>
                               <SelectTrigger>
-                                  <SelectValue placeholder="Select an user type" />
+                                  <SelectValue placeholder="Select an user type" /> 
                               </SelectTrigger>
                           </FormControl>
                           <SelectContent>
+                            {(user?.user_type === "developer" || user?.user_type === "administrator") && (
                               <SelectItem value="administrator" >Administrator</SelectItem>
+                            )}
+                              
                               <SelectItem value="teacher" >Teacher</SelectItem>
                               <SelectItem value="student" >Student</SelectItem>
                               
@@ -184,12 +211,12 @@ export default function page() {
             >
   
             </FormField>
-            <Button>Submit</Button>
+            <Button>{loading ? "Loading" : "Submit"}</Button>
           </form>
         </Form>
         </div>
       </>
     );
   }
-  
+
 }

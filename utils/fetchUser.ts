@@ -85,7 +85,7 @@ export const gettingUser = async () => {
         })
         if (response.ok && response.status===200){
             const data = await response.json()
-            return data.username;
+            return data;
         }else{
             cookieStore.delete('token');
             return null;

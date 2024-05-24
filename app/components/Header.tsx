@@ -121,7 +121,7 @@ export default function Header() {
             </div>
           </form>
           <DropdownMenu>
-            <span>{user && user}</span>
+            <span>{user && user.name}</span>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
                 <CircleUser className="h-5 w-5" />
