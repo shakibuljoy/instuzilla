@@ -15,6 +15,7 @@ import { Button } from "@/components/ui/button";
 import { loginFormSchema } from "@/utils/formSchema";
 import AuthContext from "@/app/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { toast } from "@/components/ui/use-toast";
 
 
 export default function page() {
@@ -32,6 +33,7 @@ export default function page() {
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
+      instu_id: "",
       username: "",
       password:"",
     },
@@ -41,17 +43,46 @@ export default function page() {
   function onSubmit(values: z.infer<typeof loginFormSchema>) {
    
    signIn(values)
-   console.log("Submitted", values)
+   if(user){
+    toast({
+      variant: "default",
+      title: "Success!",
+      description: ` Hi! ${user.name} you're now logged in!`
+    })
   }
+   
+  }
+
+  useEffect(() => {
+    if (error?.length >0){
+      toast({
+        variant: "destructive",
+        title: "Heads Up!",
+        description: error
+      })
+    }
+  }, [error, user])
   return (
     <>
-    {user? (<h1>{user.name}</h1>):(<h1>Shade</h1>)}
-    {error?.length >0 && (<h1>{error}</h1>)}
       
       <div className="w-96 items-center border border-indigo-500 bg-slate-50 rounded-sm shadow-xl mx-auto p-4" >
         <h3 className="text-md" >Login</h3>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          {/* Institute Id field */}
+          <FormField
+            control={form.control}
+            name="instu_id"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Institute ID</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           {/* UserName field */}
           <FormField
             control={form.control}
@@ -59,8 +90,10 @@ export default function page() {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Username</FormLabel>
+                
                 <FormControl>
                   <Input placeholder="shadcn" {...field} />
+                  
                 </FormControl>
                 <FormMessage />
               </FormItem>

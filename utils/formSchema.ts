@@ -2,6 +2,7 @@ import {z} from 'zod'
 
 
 export const loginFormSchema = z.object({
+    instu_id: z.string(),
     username: z
       .string()
       .min(2, {

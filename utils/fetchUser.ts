@@ -10,16 +10,17 @@ interface LoginResponse {
 
 const baseUrl = 'http://127.0.0.1:8000'
 
-export const loginUser = async (credentals:z.infer<typeof loginFormSchema>) => {
+export const loginUser = async (credentials:z.infer<typeof loginFormSchema>) => {
     const cookieStore = cookies();
     cookieStore.delete('token')
     cookieStore.delete('refresh')
+    credentials.username = credentials.instu_id+'_'+credentials.username;
     const response = await fetch(`${baseUrl}/api/token/`,{
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(credentals)
+        body: JSON.stringify(credentials)
     })
         if (response.ok && response.status===200){
             const data = await response.json();
@@ -35,19 +36,23 @@ export const loginUser = async (credentals:z.infer<typeof loginFormSchema>) => {
                 sameSite: 'strict', // Mitigate CSRF risk
                 secure: process.env.NODE_ENV === 'production', // Set Secure flag only in production
               });
-              return data;
-        }else{
+            return data;
+        }else if(response.status > 201){
+            const error = await response.json()
+            throw new Error(error.detail)
+        }
+        else{
             throw new Error("Something went wrong!")
         }
         
 }   
 
 
-export const registerUser = async (credentals:z.infer<typeof signupFormSchema>) => {
+export const registerUser = async (credentials:z.infer<typeof signupFormSchema>) => {
     const cookieStore = cookies();
     const token = cookieStore.get('token')?.value || null;
     if (token){
-        const parsedData = signupFormSchema.safeParse(credentals) !== undefined && signupFormSchema.safeParse(credentals);
+        const parsedData = signupFormSchema.safeParse(credentials) !== undefined && signupFormSchema.safeParse(credentials);
         if(parsedData){
             const response = await fetch(`${baseUrl}/api/register/`, {
                 method: 'POST',
@@ -88,6 +93,27 @@ export const gettingUser = async () => {
             return data;
         }else{
             cookieStore.delete('token');
+            return null;
+        }
+    }
+    return null;
+}
+
+export const verifyingUser = async () => {
+    const cookieStore = cookies();
+    const token = cookieStore.get('token')?.value || null;
+    if (token){
+        const response = await fetch(`${baseUrl}/api/verify-user/`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            }
+        })
+        if (response.ok && response.status===200){
+            const data = await response.json()
+            return data;
+        }else{
             return null;
         }
     }

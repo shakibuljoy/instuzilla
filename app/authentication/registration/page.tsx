@@ -31,7 +31,6 @@ export default function page() {
 
     useEffect(() => {
       if (user?.user_type === 'student' || user?.user_type == 'teacher'){
-        console.log(user)
         toast({
           variant: "destructive",
           title: "Heads Up!",
@@ -69,7 +68,6 @@ export default function page() {
     setLoading(false);
     setStatus(prev => registration)
     
-   console.log("Submitted")
   }
   if(status && status.length > 0){
     return (

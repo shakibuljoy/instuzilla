@@ -1,15 +1,16 @@
 "use client";
+import { createContext, useEffect, useState } from "react";
+import { z } from "zod";
+import {jwtDecode} from "jwt-decode";
 import { gettingUser, logOutUser, loginUser, updateUser } from "@/utils/fetchUser";
 import { loginFormSchema } from "@/utils/formSchema";
-import React, { createContext, useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
-import { z } from "zod";
 
 interface LoginResponse {
   access: string;
   refresh: string;
 }
-interface JwtCustomePayload {
+
+interface JwtCustomPayload {
   iss?: string;
   sub?: string;
   aud?: string[] | string;
@@ -20,10 +21,11 @@ interface JwtCustomePayload {
   name: string;
   type: string;
 }
+
 const AuthContext = createContext<{
   signIn: (credentials: z.infer<typeof loginFormSchema>) => void;
   token: LoginResponse | null;
-  user: {name: string | null, user_type: string | null} | null;
+  user: { name: string | null; user_type: string | null } | null;
   error: string;
   logOut: () => boolean;
 }>({
@@ -39,49 +41,69 @@ export const AuthenticationProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] = useState<{name: string | null, user_type: string | null} | null>(null);
+  const [user, setUser] = useState<{ name: string | null; user_type: string | null } | null>(null);
   const [error, setError] = useState("");
   const [token, setToken] = useState<LoginResponse | null>(null);
 
   useEffect(() => {
-    const getUser = async () => {
-      const data = await gettingUser()
-      if(data){
-        setUser(data)
-      }else{
-        await updateUser()
+    const fetchUser = async () => {
+      try {
+        const userData = await gettingUser();
+        if (userData) {
+          setUser(userData);
+        } else {
+          const updatedToken = await updateUser();
+          if (updatedToken) {
+            const decoded = jwtDecode<JwtCustomPayload>(updatedToken.access);
+            setUser({
+              name: decoded.name || null,
+              user_type: decoded.type || null,
+            });
+            setToken(updatedToken);
+          }else{
+            logOut()
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching or updating user:", err);
       }
-    }
-    getUser();
-  },[])
-  const signIn = (credentials: z.infer<typeof loginFormSchema>) => {
-    const userData = loginUser(credentials).then((response) => {
-      if (response as LoginResponse){
+    };
+    fetchUser();
+  }, []);
+
+  const signIn = async (credentials: z.infer<typeof loginFormSchema>) => {
+    try {
+      const response = await loginUser(credentials);
+      const data = await response;
+      if (response) {
         setError("");
-      const decoded = jwtDecode<JwtCustomePayload>(response.access);
-      setUser({
-        name: decoded.name ? decoded.name : null,
-        user_type: decoded.type ? decoded.type : null,
-      });
-      setToken(response);
-      }else{
-        setError("Invalid Credentials!")
+        const decoded = jwtDecode<JwtCustomPayload>(response.access);
+        setUser({
+          name: decoded.name || null,
+          user_type: decoded.type || null,
+        });
+        setToken(response);
+      } else {
+        setError(data.detail);
       }
-      
-    }).catch(err => {
-      setError(err.message)
-    });
+    } catch (err) {
+      setError("Invalid Credentials");
+    }
   };
+
+
+
 
   const logOut = () => {
     const loggingOut = logOutUser();
-    if (loggingOut){
+    if (loggingOut) {
       setUser(null);
-
-      return logOutUser();
+      setToken(null);
+      return true;
     }
     return false;
-  }
+  };
+
   return (
     <AuthContext.Provider value={{ signIn, token, error, user, logOut }}>
       {children}
