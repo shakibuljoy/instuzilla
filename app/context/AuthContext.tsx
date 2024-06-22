@@ -72,22 +72,25 @@ export const AuthenticationProvider = ({
   }, []);
 
   const signIn = async (credentials: z.infer<typeof loginFormSchema>) => {
+    setError("");
     try {
       const response = await loginUser(credentials);
       const data = await response;
       if (response) {
-        setError("");
         const decoded = jwtDecode<JwtCustomPayload>(response.access);
         setUser({
           name: decoded.name || null,
           user_type: decoded.type || null,
         });
         setToken(response);
+        return true;
       } else {
         setError(data.detail);
+        return false
       }
-    } catch (err) {
-      setError("Invalid Credentials");
+    } catch (err:any) {
+      setError(err.message);
+      return false;
     }
   };
 

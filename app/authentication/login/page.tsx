@@ -40,8 +40,7 @@ export default function page() {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-   
+function onSubmit(values: z.infer<typeof loginFormSchema>) {
    signIn(values)
    if(user){
     toast({
