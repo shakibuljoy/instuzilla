@@ -58,3 +58,22 @@ export const signupFormSchema = z.object({
     message: "Passwords don't match",
     path: ["confirmPassword"],
 });
+
+
+export const StudentSchema = z.object({
+  id: z.number().optional(),
+  student_id: z.string().min(1, "Student ID is required"),
+  position: z.number().int(),
+  klass: z.string().min(1, "Plese Select a Classes"),
+  institute: z.string().nullable(),
+  first_name: z.string().min(1, "First Name is required"),
+  last_name: z.string().min(1, "Last Name is required"),
+  mobile: z.string().min(1, "Mobile number is required"),
+  mothers_name: z.string().min(1, "Mother's Name is required"),
+  fathers_name: z.string().min(1, "Father's Name is required"),
+  address: z.string().min(1, "Address is required"),
+  birth_date: z.string().min(1, "Birth Date is required"),
+  birth_certificate_no: z.string().min(1, "Birth Certificate No is required"),
+  nid_no: z.string().nullable(),
+  image: z.any().nullable(),
+});

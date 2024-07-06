@@ -1,27 +1,4 @@
-// import { NextRequest, NextResponse } from "next/server";
-// import { verifyingUser } from "./utils/fetchUser";
 
-// export default async function middleware(request: NextRequest){
-    
-//     const response = NextResponse.next();
-//     const authUrl = ['/authentication/login']
-//     const protectedUrl = ['/authentication/registration', '/students/.*']
-//     if(authUrl.includes(request.nextUrl.pathname)){
-//            const user = await verifyingUser();
-        
-//     if(user){
-//         return NextResponse.redirect(new URL('/', request.url))
-//     }
-//     }else if(protectedUrl.includes(request.nextUrl.pathname)){
-//         const user = await verifyingUser();
-//         if(!user){
-//             return NextResponse.redirect(new URL('/authentication/logout', request.url))
-//         }
-        
-//     }
-    
-//     return response
-// }
 import { NextRequest, NextResponse } from "next/server";
 import { verifyingUser } from "./utils/fetchUser";
 
@@ -43,14 +20,15 @@ export default async function middleware(request: NextRequest) {
   if (authUrl.includes(pathname)) {
     const user = await verifyingUser();
 
-    if (user) {
+    if (user && user.user_type !== 'student') {
+      console.log(user.user_type)
       return NextResponse.redirect(new URL('/', request.url));
     }
   } else if (isProtectedRoute(pathname, protectedPatterns)) {
     const user = await verifyingUser();
 
     if (!user) {
-      return NextResponse.redirect(new URL('/authentication/logout', request.url));
+      return NextResponse.redirect(new URL('/authentication/update-user', request.url));
     }
   }
 

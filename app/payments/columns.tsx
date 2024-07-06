@@ -14,18 +14,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
-import { StatusHeader } from "./StatusHeader";
+import { StatusHeader } from "../components/StatusHeader";
+import Link from "next/link";
+import { studentInfo } from "../students/[id]/page";
 
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
-};
 
-const status_fields = ["pending" , "processing" , "success" , "failed"]
-
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<studentInfo>[] = [
+  
   {
     id: "select",
     header: ({ table }) => (
@@ -47,27 +42,49 @@ export const columns: ColumnDef<Payment>[] = [
     )
   },
   {
-    accessorKey: "status",
+    accessorKey: "klass",
+    header: ({ column }) => {
+    
+      return (
+        <StatusHeader column={column} title="Class" /> 
+      )
+    },
+  },
+  {
+    accessorKey: "student_id",
     header: ({ column }) => (
-      <StatusHeader column={column} title="Status" fields={status_fields} /> 
+      <DataTableColumnHeader column={column} title="Student ID" />
     ),
   },
   {
-    accessorKey: "email",
+    accessorKey: "first_name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Email" />
+      <DataTableColumnHeader column={column} title="First Name" />
     ),
   },
   {
-    accessorKey: "amount",
+    accessorKey: "last_name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Amount" />
+      <DataTableColumnHeader column={column} title="Last Name" />
     ),
   },
+  {
+    accessorKey: "mobile",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Mobile" />
+    ),
+  },
+  {
+    accessorKey: "position",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Position" />
+    ),
+  },
+  
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const student = row.original;
 
       return (
         <DropdownMenu>
@@ -78,15 +95,16 @@ export const columns: ColumnDef<Payment>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>{payment.email}</DropdownMenuLabel>
+            <DropdownMenuLabel>{student.student_id}</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() => navigator.clipboard.writeText(student.student_id)}
             >
-              Copy payment ID
+              Copy Student ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem><Link href={`/students/${student.id}`} >View {student.first_name}</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href={`/students/edit-student/${student.id}`} >Edit {student.first_name}</Link></DropdownMenuItem>
+ 
           </DropdownMenuContent>
         </DropdownMenu>
       );

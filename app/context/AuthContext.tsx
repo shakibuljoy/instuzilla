@@ -65,7 +65,7 @@ export const AuthenticationProvider = ({
           }
         }
       } catch (err) {
-        console.error("Error fetching or updating user:", err);
+        setError("An error occured when fetching user");
       }
     };
     fetchUser();

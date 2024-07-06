@@ -1,3 +1,4 @@
+'use client'
 import {
     ArrowUpIcon,
     CaretSortIcon,
@@ -16,24 +17,23 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import React from "react"
+import useFetchClasses from "@/hooks/useFetchClasses"
 
 interface DataTableColumnHeaderProps<TData, TValue>
     extends React.HTMLAttributes<HTMLDivElement> {
         column: Column<TData, TValue>
         title: string,
-        fields: string[]
     }
 
 export function StatusHeader<TData, TValue>({
     column,
     title,
-    fields,
     className
 }: DataTableColumnHeaderProps<TData, TValue>) {
+    const klasses = useFetchClasses();
     if (!column.getCanSort()) {
         return <div className={cn(className)} >{title}</div>
     }
-
     return (
         <div className={cn("flex items-center space-x-2", className)}>
             <DropdownMenu>
@@ -52,7 +52,7 @@ export function StatusHeader<TData, TValue>({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                    {fields.map((field, index) => (
+                    {klasses.map((field, index) => (
                         <DropdownMenuCheckboxItem 
                         key={index}
                         onCheckedChange={() => column.getFilterValue()?column.setFilterValue(""):column.setFilterValue(field)}
