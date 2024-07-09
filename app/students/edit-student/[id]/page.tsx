@@ -4,12 +4,18 @@ import useStudentInfo from '@/hooks/useStudentInfo'
 import React from 'react'
 
 export default function page({params}:{params: {id:string}}) {
-  const {studentData, imageUrl} = useStudentInfo(params.id);
+  const {studentData, imageUrl, loading, error} = useStudentInfo(params.id);
 
-  if (!studentData) {
-    return <div>Loading...</div>; // Add a loading state
+  if (loading) {
+    return <div>Loading...</div>;
+  }else if(studentData){
+    return (
+      <StudentRegisterForm instance={studentData} instance_image={null} />
+    )
   }
   return (
-    <StudentRegisterForm instance={studentData} instance_image={null} />
+    <div className='m-auto mt-[50vh] font-bold text-red-500 text-3xl align-middle items-center' >{error ? error : "No student data available"}</div>
   )
+  
+  
 }

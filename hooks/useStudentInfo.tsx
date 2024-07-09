@@ -2,13 +2,6 @@
 import { getStudentImage, getStudentInfo } from '@/utils/fetchStudent'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import { useToast } from '@/components/ui/use-toast';
 
 export type studentInfo = {
@@ -32,34 +25,20 @@ export type studentInfo = {
 
 export default function useStudentInfo(id:string) {
   const {toast} = useToast();
-  const [student, setStudent] = useState<studentInfo>({
-    id:"",
-    student_id: "",
-    position: null,
-    klass:"",
-    image: "",
-    image_url:null,
-    first_name: "",
-    last_name: "",
-    mobile: "",
-    mothers_name: "",
-    fathers_name: "",
-    address: "",
-    birth_date: "",
-    birth_certificate_no: "",
-    nid_no: null,
-    institute: ""
-  })
+  const [student, setStudent] = useState<studentInfo | null>(null)
   const [imageUrl, setImageUrl] = useState("")
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState("")
 
   useEffect(() => {
     const getStudent = async () => {
+      setLoading(true);
       setError("")
       try {
         const studentResponse = await getStudentInfo(id)
         if (studentResponse) {
           setStudent(studentResponse)
+          setLoading(false);
         }
       } catch (error: any) {
         toast({
@@ -68,6 +47,10 @@ export default function useStudentInfo(id:string) {
           description: error.message,
         })
         setError(error.message)
+        setLoading(false)
+      } finally{
+        setError("");
+        setLoading(false);
       }
     }
     getStudent()
@@ -86,12 +69,14 @@ export default function useStudentInfo(id:string) {
       }
     }
 
-    if (student.image_url) {
+    if (student?.image_url) {
       getImage(student.image_url)
     }
-  }, [student.image])
+  }, [student])
   return {
     studentData:student,
-    imageUrl:imageUrl
+    imageUrl:imageUrl,
+    loading:loading,
+    error: error
   }
 }

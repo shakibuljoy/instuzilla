@@ -58,7 +58,6 @@ export default function Page() {
     student_id: "",
     position: 1,
     klass: "",
-    institute: null,
     first_name: "",
     last_name: "",
     mobile: "",
@@ -104,10 +103,12 @@ export default function Page() {
         formData.append(key, safeValues[key]);
       }
     }
+    
 
 
     try {
       const data = await registerStudent(formData);
+      console.log(formData)
       if (data) {
         toast({
           variant: "default",

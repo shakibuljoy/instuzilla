@@ -104,7 +104,7 @@ export async function registerStudent(formData: FormData, id:string | null=null)
         try {
             if(id){
                 const response = await fetch(`${baseUrl}/api/students/${id}/`, {
-                    method: "PUT",
+                    method: "PATCH",
                     headers: {
                         'Authorization': `Bearer ${token}`,
                     },
@@ -113,10 +113,11 @@ export async function registerStudent(formData: FormData, id:string | null=null)
                 if (response.ok) {
                     const data = await response.json();
                     return data;
-                } else if (response.status === 400) {
-                    throw new Error("Please filled up all of required fields")
+                // } else if (response.status === 400) {
+                //     throw new Error("Please filled up all of required fields")
                 } else {
                     const errorData = await response.json();
+                    console.log(errorData)
                     throw new Error(errorData.detail || 'An error occurred');
                 }
 

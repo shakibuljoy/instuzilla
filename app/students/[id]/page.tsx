@@ -32,24 +32,7 @@ export type studentInfo = {
 
 export default function Page({ params }: { params: { id: string } }) {
   const {toast} = useToast();
-  const [student, setStudent] = useState<studentInfo>({
-    id:"",
-    student_id: "",
-    position: null,
-    klass:"",
-    image: "",
-    image_url:null,
-    first_name: "",
-    last_name: "",
-    mobile: "",
-    mothers_name: "",
-    fathers_name: "",
-    address: "",
-    birth_date: "",
-    birth_certificate_no: "",
-    nid_no: null,
-    institute: ""
-  })
+  const [student, setStudent] = useState<studentInfo | null>(null);
   const [imageUrl, setImageUrl] = useState("")
   const [error, setError] = useState("")
 
@@ -60,6 +43,8 @@ export default function Page({ params }: { params: { id: string } }) {
         const studentResponse = await getStudentInfo(params.id)
         if (studentResponse) {
           setStudent(studentResponse)
+        }else{
+          setStudent(null);
         }
       } catch (error: any) {
         toast({
@@ -68,6 +53,7 @@ export default function Page({ params }: { params: { id: string } }) {
           description: error.message,
         })
         setError(error.message)
+        setStudent(null);
       }
     }
     getStudent()
@@ -86,52 +72,54 @@ export default function Page({ params }: { params: { id: string } }) {
       }
     }
 
-    if (student.image_url) {
+    if (student?.image_url) {
       getImage(student.image_url)
     }
-  }, [student.image])
-  if (!student) {
+  }, [student])
+ 
+  if(student){
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p>No student data available</p>
+      <div className="container max-w-[700px] mx-auto my-8 p-4">
+        <Card>
+          <CardHeader>
+            <CardTitle className='text-indigo-500' >{student.first_name} {student.last_name}</CardTitle>
+            <CardDescription>
+  
+            {imageUrl && <Image width={80} height={80} src={imageUrl} alt='student picture' />}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className=" grid grid-cols-2 space-x-2">
+              <div className='space-y-2'>
+                <h3 className="font-semibold text-lg text-slate-400">Personal Information</h3>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Student ID:</strong> {student.student_id}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Class:</strong> {student.klass}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>First Name:</strong> {student.first_name}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Last Name:</strong> {student.last_name}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Mobile:</strong> {student.mobile}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Mother's Name:</strong> {student.mothers_name}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Father's Name:</strong> {student.fathers_name}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Address:</strong> {student.address}</p>
+              </div>
+              <div className='space-y-2'>
+                <h3 className="font-semibold text-lg text-slate-400">Additional Information</h3>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Date of Birth:</strong> {student.birth_date}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Birth Certificate No:</strong> {student.birth_certificate_no}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>NID No:</strong> {student.nid_no}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Institute:</strong> {student.institute}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Position:</strong> {student.position}</p>
+                
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    );
+    )
   }
-  return (
-    <div className="container max-w-[700px] mx-auto my-8 p-4">
-      <Card>
-        <CardHeader>
-          <CardTitle className='text-indigo-500' >{student.first_name} {student.last_name}</CardTitle>
-          <CardDescription>
-
-          {imageUrl && <Image width={80} height={80} src={imageUrl} alt='student picture' />}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className=" grid grid-cols-2 space-x-2">
-            <div className='space-y-2'>
-              <h3 className="font-semibold text-lg text-slate-400">Personal Information</h3>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Student ID:</strong> {student.student_id}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Class:</strong> {student.klass}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>First Name:</strong> {student.first_name}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Last Name:</strong> {student.last_name}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Mobile:</strong> {student.mobile}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Mother's Name:</strong> {student.mothers_name}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Father's Name:</strong> {student.fathers_name}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Address:</strong> {student.address}</p>
-            </div>
-            <div className='space-y-2'>
-              <h3 className="font-semibold text-lg text-slate-400">Additional Information</h3>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Date of Birth:</strong> {student.birth_date}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Birth Certificate No:</strong> {student.birth_certificate_no}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>NID No:</strong> {student.nid_no}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Institute:</strong> {student.institute}</p>
-              <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Position:</strong> {student.position}</p>
-              
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
+    
+  return (<div className="m-auto mt-[50vh] justify-center items-center h-screen">
+      <p className='text-red-500 font-bold text-3xl'>{error}</p>
+    </div>)
+ 
+  
 }

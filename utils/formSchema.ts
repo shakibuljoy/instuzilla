@@ -65,7 +65,7 @@ export const StudentSchema = z.object({
   student_id: z.string().min(1, "Student ID is required"),
   position: z.number().int(),
   klass: z.string().min(1, "Plese Select a Classes"),
-  institute: z.string().nullable(),
+  institute: z.string().optional(),
   first_name: z.string().min(1, "First Name is required"),
   last_name: z.string().min(1, "Last Name is required"),
   mobile: z.string().min(1, "Mobile number is required"),
