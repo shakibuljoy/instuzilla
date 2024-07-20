@@ -107,7 +107,7 @@ export default function StudentRegisterForm({ instance = null, instance_image = 
 
     if (selectedImage) {
       formData.append("image", selectedImage);
-    } else {
+    } else if(!instance) {
       toast({
         variant: "destructive",
         title: "Error",

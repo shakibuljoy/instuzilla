@@ -1,4 +1,5 @@
-'use client'
+
+import React from 'react'
 import {
     ArrowUpIcon,
     CaretSortIcon,
@@ -16,8 +17,6 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
-import React from "react"
-import useFetchClasses from "@/hooks/useFetchClasses"
 
 interface DataTableColumnHeaderProps<TData, TValue>
     extends React.HTMLAttributes<HTMLDivElement> {
@@ -25,15 +24,11 @@ interface DataTableColumnHeaderProps<TData, TValue>
         title: string,
     }
 
-export function StatusHeader<TData, TValue>({
+export function PresentsHeader<TData, TValue>({
     column,
     title,
     className
-}: DataTableColumnHeaderProps<TData, TValue>) {
-    const {classes} = useFetchClasses();
-    if (!column.getCanSort()) {
-        return <div className={cn(className)} >{title}</div>
-    }
+}: DataTableColumnHeaderProps<TData, TValue>){
     return (
         <div className={cn("flex items-center space-x-2", className)}>
             <DropdownMenu>
@@ -52,22 +47,22 @@ export function StatusHeader<TData, TValue>({
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                    {classes.map((field:string, index:number) => (
+                    {[true, false].map((field, index) => (
                         <DropdownMenuCheckboxItem 
                         key={index}
-                        onCheckedChange={() => column.getFilterValue()?column.setFilterValue(""):column.setFilterValue(field)}
-                        checked={column.getFilterValue()?.toString()===field ? true:false}
+                        onCheckedChange={() => column.getFilterValue()?column.setFilterValue(undefined):column.setFilterValue(field)}
+                        checked={column.getFilterValue()===field || false}
                         >
                             
                             
-                            {field}
+                            {field ? 'Present' : 'Abscent'}
                         </DropdownMenuCheckboxItem>
                     ))}
                     
 
                     <DropdownMenuCheckboxItem 
-                    onCheckedChange={() => column.getFilterValue() && column.setFilterValue("")}
-                    checked={column.getFilterValue()? false:true}
+                    onCheckedChange={() => column.setFilterValue(undefined)}
+                    checked={column.getFilterValue() === undefined}
                     >
                         
                         

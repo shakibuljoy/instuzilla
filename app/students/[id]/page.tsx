@@ -10,25 +10,8 @@ import {
   CardDescription,
 } from "@/components/ui/card";
 import { useToast } from '@/components/ui/use-toast';
+import { studentInfo } from '@/lib/TypeOF';
 
-export type studentInfo = {
-  id:string,
-  student_id: string,
-  position: number | null,
-  klass:string,
-  image: string,
-  image_url: string | null,
-  first_name: string,
-  last_name: string,
-  mobile: string,
-  mothers_name: string,
-  fathers_name: string,
-  address: string,
-  birth_date: string,
-  birth_certificate_no: string,
-  nid_no: string | null,
-  institute: string
-}
 
 export default function Page({ params }: { params: { id: string } }) {
   const {toast} = useToast();
@@ -103,6 +86,7 @@ export default function Page({ params }: { params: { id: string } }) {
               </div>
               <div className='space-y-2'>
                 <h3 className="font-semibold text-lg text-slate-400">Additional Information</h3>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Admission Date:</strong> {student.admission_date}</p>
                 <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Date of Birth:</strong> {student.birth_date}</p>
                 <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Birth Certificate No:</strong> {student.birth_certificate_no}</p>
                 <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>NID No:</strong> {student.nid_no}</p>

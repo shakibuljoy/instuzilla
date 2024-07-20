@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from "react"
-import { studentInfo } from "../students/[id]/page"
+import { studentInfo } from "../[id]/page"
 import { DataTable } from "./data-table"
 import { getStudentList } from "@/utils/fetchStudent"
 import {columns } from "./columns"
@@ -40,7 +40,7 @@ export default function page() {
       {studentList ? (
         <DataTable columns={columns} data={studentList} />
       ):(
-        <h1>No student available to show!</h1>
+        <h1 className="text-center">No student available to show!</h1>
       )}
       
     </div>

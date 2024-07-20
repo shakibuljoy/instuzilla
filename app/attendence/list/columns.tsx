@@ -14,12 +14,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
-import { StatusHeader } from "../components/StatusHeader";
+import { StatusHeader } from "../../components/StatusHeader";
 import Link from "next/link";
-import { studentInfo } from "../students/[id]/page";
+import { AttendList } from "@/lib/TypeOF";
+import { PresentsHeader } from "@/app/components/PresentsHeader";
 
 
-export const columns: ColumnDef<studentInfo>[] = [
+export const columns: ColumnDef<AttendList>[] = [
   
   {
     id: "select",
@@ -42,49 +43,54 @@ export const columns: ColumnDef<studentInfo>[] = [
     )
   },
   {
-    accessorKey: "klass",
-    header: ({ column }) => {
+    accessorKey: "presents",
+    header: ({column}) => {
+      return (
+        <PresentsHeader column={column} title="Presents" />
+      )
+    },
+    cell: ({ row }) => {
+      const attendence = row.original;
     
       return (
-        <StatusHeader column={column} title="Class" /> 
+        <span className={`text-slate-50 ${attendence.presents ? "bg-green-500" : "bg-red-500"} rounded-md h-4 w-4 items-center p-1`} >{attendence.presents ? "Present" : "Abscent"}</span>
       )
     },
   },
   {
-    accessorKey: "student_id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Student ID" />
-    ),
-  },
-  {
-    accessorKey: "first_name",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="First Name" />
-    ),
-  },
-  {
-    accessorKey: "last_name",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Last Name" />
-    ),
-  },
-  {
-    accessorKey: "mobile",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Mobile" />
-    ),
-  },
-  {
-    accessorKey: "position",
+    accessorKey: "student.position",
+    meta: 'Position',
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Position" />
     ),
   },
   
   {
+    accessorKey: "student.first_name",
+    meta: 'First Name',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="First Name" />
+    ),
+  },
+  {
+    accessorKey: "student.last_name",
+    meta: 'Last Name',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Last Name" />
+    ),
+  },
+  {
+    accessorKey: "student.fathers_name",
+    meta: 'Fathers Name',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Father's Name" />
+    ),
+  },
+  
+  {
     id: "actions",
     cell: ({ row }) => {
-      const student = row.original;
+      const attendence = row.original;
 
       return (
         <DropdownMenu>
@@ -95,15 +101,15 @@ export const columns: ColumnDef<studentInfo>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>{student.student_id}</DropdownMenuLabel>
+            <DropdownMenuLabel>{attendence.student.student_id}</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(student.student_id)}
+              onClick={() => navigator.clipboard.writeText(attendence.student.student_id)}
             >
               Copy Student ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link href={`/students/${student.id}`} >View {student.first_name}</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href={`/students/edit-student/${student.id}`} >Edit {student.first_name}</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href={`/students/${attendence.student.id}`} >View {attendence.student.first_name}</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href={`/students/edit-student/${attendence.student.id}`} >Edit {attendence.student.first_name}</Link></DropdownMenuItem>
  
           </DropdownMenuContent>
         </DropdownMenu>
@@ -111,3 +117,24 @@ export const columns: ColumnDef<studentInfo>[] = [
     },
   },
 ];
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

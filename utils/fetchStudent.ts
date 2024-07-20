@@ -2,11 +2,11 @@
 import { cookies } from "next/headers";
 
 const baseUrl = 'http://127.0.0.1:8000';
-export async function getStudentList() {
+export async function getStudentList(klass_id?:string) {
     const cookieStore = cookies();
     const token = cookieStore.get('token')?.value || null;
     try {
-        const response = await fetch(`${baseUrl}/api/students`, {
+        const response = await fetch(`${baseUrl}/api/students${klass_id? '?klass='+klass_id:''}`, {
             headers: {
                 'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json'
@@ -117,7 +117,6 @@ export async function registerStudent(formData: FormData, id:string | null=null)
                 //     throw new Error("Please filled up all of required fields")
                 } else {
                     const errorData = await response.json();
-                    console.log(errorData)
                     throw new Error(errorData.detail || 'An error occurred');
                 }
 

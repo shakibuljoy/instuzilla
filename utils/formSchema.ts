@@ -77,3 +77,10 @@ export const StudentSchema = z.object({
   nid_no: z.string().nullable(),
   image: z.any().nullable(),
 });
+
+export const AttendenceSchema = z.object({
+  student: z.string().min(1),
+  klass: z.string().min(1),
+  presents: z.boolean(),
+  cause: z.string().optional(),
+})

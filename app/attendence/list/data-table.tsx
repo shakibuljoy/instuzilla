@@ -1,6 +1,7 @@
 "use client";
 import * as React from "react";
 import {
+  Column,
   ColumnDef,
   ColumnFiltersState,
   SortingState,
@@ -28,8 +29,10 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
+
+
 import { Filter } from "lucide-react";
+import SearchTable from "@/app/components/SearchTable";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -68,29 +71,30 @@ export function DataTable<TData, TValue>({
       rowSelection,
     },
   });
+ 
 
-
+  const getMeta = (column:Column<TData, unknown>) => {
+    const colDef = column.columnDef;
+    if(typeof colDef.meta === 'string'){
+      return colDef.meta;
+    }else{
+      return column.id;
+    }
+  }
+ 
   return (
     <div>
       <div className="flex-1 text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
           {table.getFilteredRowModel().rows.length} row(s) selected.
         </div>
-      <div className="flex items-center py-4">
-
-        <Input
-          placeholder="Filter Class..."
-          value={(table.getColumn("klass")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("klass")?.setFilterValue(event.target.value)
-          }
-          className="max-w-sm"
-        />
+      <div className="flex py-4 space-x-2">
+          <SearchTable table={table} />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto">
-              Filter
-              <Filter size="sm" />
+              Visibility
+              <Filter size="22px" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
@@ -98,7 +102,9 @@ export function DataTable<TData, TValue>({
               .getAllColumns()
               .filter((column) => column.getCanHide())
               .map((column) => {
+                
                 return (
+                  column.id !== ('actions' || 'select') &&
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalized"
@@ -107,7 +113,7 @@ export function DataTable<TData, TValue>({
                       column.toggleVisibility(!!value)
                     }
                   >
-                    {column.id}
+                    {getMeta(column)}
                   </DropdownMenuCheckboxItem>
                 );
               })}

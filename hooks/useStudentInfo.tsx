@@ -3,25 +3,9 @@ import { getStudentImage, getStudentInfo } from '@/utils/fetchStudent'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast';
+import { studentInfo } from '@/lib/TypeOF';
 
-export type studentInfo = {
-  id:string,
-  student_id: string,
-  position: number | null,
-  klass:string,
-  image: string,
-  image_url: string | null,
-  first_name: string,
-  last_name: string,
-  mobile: string,
-  mothers_name: string,
-  fathers_name: string,
-  address: string,
-  birth_date: string,
-  birth_certificate_no: string,
-  nid_no: string | null,
-  institute: string
-}
+
 
 export default function useStudentInfo(id:string) {
   const {toast} = useToast();
