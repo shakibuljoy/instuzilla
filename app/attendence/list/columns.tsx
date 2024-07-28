@@ -18,6 +18,8 @@ import { StatusHeader } from "../../components/StatusHeader";
 import Link from "next/link";
 import { AttendList } from "@/lib/TypeOF";
 import { PresentsHeader } from "@/app/components/PresentsHeader";
+import AttendenceEdit from "@/app/components/AttendenceEdit";
+import { table } from "console";
 
 
 export const columns: ColumnDef<AttendList>[] = [
@@ -64,6 +66,13 @@ export const columns: ColumnDef<AttendList>[] = [
       <DataTableColumnHeader column={column} title="Position" />
     ),
   },
+  {
+    accessorKey: "cause",
+    meta: 'Cause',
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Cause" />
+    ),
+  },
   
   {
     accessorKey: "student.first_name",
@@ -91,7 +100,6 @@ export const columns: ColumnDef<AttendList>[] = [
     id: "actions",
     cell: ({ row }) => {
       const attendence = row.original;
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -109,8 +117,7 @@ export const columns: ColumnDef<AttendList>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem><Link href={`/students/${attendence.student.id}`} >View {attendence.student.first_name}</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href={`/students/edit-student/${attendence.student.id}`} >Edit {attendence.student.first_name}</Link></DropdownMenuItem>
- 
+            <AttendenceEdit attendence_id={attendence.id} ><Button>Edit Attendece</Button></AttendenceEdit>
           </DropdownMenuContent>
         </DropdownMenu>
       );

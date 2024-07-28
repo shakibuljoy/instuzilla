@@ -15,9 +15,9 @@ import { Button } from "@/components/ui/button"
 import useStudentList from "@/hooks/useStudentList"
 import { z } from "zod"
 import { AttendenceSchema } from "@/utils/formSchema"
-import { setAttendence } from "@/utils/fetchAttendence"
 import useFetchAttendence from "@/hooks/useFetchAttendence"
 import { useToast } from "@/components/ui/use-toast"
+import { fetchAttendence } from "@/utils/fetchAttendence"
 
 
 
@@ -52,7 +52,7 @@ export default function Page({params}:{params:{id:string}}) {
     }
     if (values) {
       try {
-        const response = await setAttendence(params.id, formData)
+        const response = await fetchAttendence(params.id, formData)
         if (response) {
           setAttendenceList(response)
         }
@@ -101,7 +101,7 @@ export default function Page({params}:{params:{id:string}}) {
                       className="border border-dashed"
                       variant="default"
                       disabled={attendData !== null}
-                      onClick={() => presentHandle({ presents: true, student: student.id.toString(), klass: student.klass })}
+                      onClick={() => presentHandle({presents: true, student: student.id.toString(), klass: student.klass })}
                     >
                       Present
                     </Button>

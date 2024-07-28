@@ -12,6 +12,7 @@ export type AttendList = {
   },
     presents: boolean,
     date: string,
+    cause: string,
   }
 
 

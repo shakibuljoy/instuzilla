@@ -79,6 +79,7 @@ export const StudentSchema = z.object({
 });
 
 export const AttendenceSchema = z.object({
+  id: z.string().optional(),
   student: z.string().min(1),
   klass: z.string().min(1),
   presents: z.boolean(),
