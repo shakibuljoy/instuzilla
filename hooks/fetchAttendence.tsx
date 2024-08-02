@@ -1,6 +1,6 @@
 import { useToast } from '@/components/ui/use-toast'
 import { AttendList } from '@/lib/TypeOF'
-import { fetchAttendence } from '@/utils/fetchAttendence'
+import { fetchAttendence, fetchStudentAttendance } from '@/utils/fetchAttendence'
 import React, { useState } from 'react'
 
 export default function useFetchAttendence(klass_id:string | null, date?:string) {
@@ -37,4 +37,39 @@ export default function useFetchAttendence(klass_id:string | null, date?:string)
         setAttendenceList:setAttendenceList,
     }
   )
+}
+
+
+
+export function useStudentAttendance(id:string, month:number, year:string) {
+  const [attendenceList, setAttendenceList] = useState<AttendList[] | []>([])
+  const {toast} = useToast()
+
+  const getAttendence = async (id:string, month:number, year:string) => {
+    
+    try{
+      const attendence = await fetchStudentAttendance(id,month,year)
+    if(attendence){
+      setAttendenceList(attendence)
+    }
+    }catch(error:any){
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: error.message
+      })
+    }
+    
+  }
+
+  React.useEffect(() => {
+    getAttendence(id,month,year)
+  },[id,month,year])
+
+  
+return (
+  {
+      attendenceList:attendenceList,
+  }
+)
 }

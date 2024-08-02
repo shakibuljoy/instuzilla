@@ -32,7 +32,7 @@ export function DatePicker({date, setDate}:{date:Date | undefined, setDate:React
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
-          mode="single"
+          mode='single'
           selected={date}
           onSelect={setDate}
           initialFocus

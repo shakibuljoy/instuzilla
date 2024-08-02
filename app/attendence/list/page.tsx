@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import useFetchAttendence from "@/hooks/useFetchAttendence"
+import useFetchAttendence from "@/hooks/fetchAttendence"
 import useFetchClasses from "@/hooks/useFetchClasses"
 import { useState } from "react"
 import { DatePicker } from "@/app/components/DatePicker"

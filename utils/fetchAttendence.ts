@@ -146,3 +146,48 @@ export async function fetchEditAttendence( id:string, formData?: FormData){
         
     }
 }}
+
+
+export async function fetchStudentAttendance( id:string, month:number, year:string){
+    const cookieStore = cookies();
+    const token = cookieStore.get('token')?.value || null;
+    if (token){
+          try {
+            const response = await fetch(`${baseUrl}/api/student-attendance/${id}?month=${month}&year=${year}`, {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+    
+            if(response.ok && response.status === 200){
+                const data = await response.json();
+                return data;
+            }else{
+                const error = await response.json();
+                console.log(error)
+                if (error.detail) {
+                    throw new Error(error.detail)
+                } else {
+                    // Handle field-specific errors
+                    Object.keys(error).forEach((field) => {
+                        throw new Error(`${error[field].join(' ')}`)
+                    });
+                }
+            }
+               
+            
+          }catch(error:any){
+            console.log(error)
+            if (error.detail) {
+                throw new Error(error.detail)
+            } else {
+                // Handle field-specific errors
+                Object.keys(error).forEach((field) => {
+                    throw new Error(`${error[field].join(' ')}`)
+                });
+            }
+        throw new Error(error.message || "Server connection failed")
+        
+    }
+}}

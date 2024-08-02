@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button"
 import useStudentList from "@/hooks/useStudentList"
 import { z } from "zod"
 import { AttendenceSchema } from "@/utils/formSchema"
-import useFetchAttendence from "@/hooks/useFetchAttendence"
+import useFetchAttendence from "@/hooks/fetchAttendence"
 import { useToast } from "@/components/ui/use-toast"
 import { fetchAttendence } from "@/utils/fetchAttendence"
 
