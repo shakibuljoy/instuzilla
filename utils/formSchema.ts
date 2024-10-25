@@ -85,3 +85,5 @@ export const AttendenceSchema = z.object({
   presents: z.boolean(),
   cause: z.string().optional(),
 })
+
+

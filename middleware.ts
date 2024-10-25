@@ -13,7 +13,7 @@ function isProtectedRoute(pathname: string, protectedPatterns: string[]): boolea
 export default async function middleware(request: NextRequest) {
   const response = NextResponse.next();
   const authUrl = ['/authentication/login'];
-  const protectedPatterns = ['/authentication/registration', '/students/[id]']; // Add dynamic route pattern
+  const protectedPatterns = ['/authentication/registration', '/students/[id]', '/finance/']; // Add dynamic route pattern
 
   const pathname = request.nextUrl.pathname;
 

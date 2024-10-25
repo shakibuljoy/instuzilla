@@ -25,6 +25,7 @@ export default function RootLayout({
           <Header />
 
           <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+            {!children && "LOADING..."}
             {children}
           </div>
         </div>

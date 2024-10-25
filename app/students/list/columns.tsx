@@ -107,8 +107,9 @@ export const columns: ColumnDef<studentInfo>[] = [
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem><Link href={`/students/${student.id}`} >View</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href={`/students/edit-student/${student.id}`} >Edit</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href={`/students/${student.id}/edit-student/`} >Edit</Link></DropdownMenuItem>
             <DropdownMenuItem><Link href={`/students/${student.id}/attendance`} >Attendance</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href={`/finance/bill/${student.id}`} >Bills</Link></DropdownMenuItem>
  
           </DropdownMenuContent>
         </DropdownMenu>

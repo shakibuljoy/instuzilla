@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { useContext } from "react"
 import AuthContext from "../context/AuthContext"
+import NavDropDown from "./NavDropDown"
 export default function Header() {
 
   const {user, logOut} = useContext(AuthContext)
@@ -28,17 +29,21 @@ export default function Header() {
             <Package2 className="h-6 w-6" />
             <span className="sr-only">Acme Inc</span>
           </Link>
+          <NavDropDown label="Student" items={[
+            <Link href="/students/register-student/" className="text-muted-foreground transition-colors hover:text-foreground">Register Student</Link>,
+            <Link href="/students/list/" className="text-muted-foreground transition-colors hover:text-foreground">Student</Link>
+          ]} />
           <Link
-            href="#"
-            className="text-muted-foreground transition-colors hover:text-foreground"
+            href="/authentication/registration"
+            className="text-muted-foreground transition-colors hover:text-foreground w-full"
           >
-            Dashboard
+            Create User
           </Link>
           <Link
-            href="#"
+            href="/attendence/list/"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
-            Orders
+            Attendence
           </Link>
           <Link
             href="#"

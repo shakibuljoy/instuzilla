@@ -1,5 +1,6 @@
 "use server"
 import { cookies } from "next/headers";
+import { formDataSubmit, getProtectedImage, simpleGETrequest, simplePOSTrequest } from "./commonFetch";
 
 const baseUrl = 'http://127.0.0.1:8000';
 export async function getStudentList(klass_id?:string) {
@@ -25,127 +26,46 @@ export async function getStudentList(klass_id?:string) {
 }
 
 export async function getStudentInfo(id: string) {
-    const cookieStore = cookies();
-    const token = cookieStore.get('token')?.value || null;
-    try {
-        const response = await fetch(`${baseUrl}/api/students/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail);
-        } else if (response.ok && response.status === 200) {
-            const data = await response.json();
-            return data;
-        }
-    } catch (error: any) {
-        throw new Error(error.message);
-    }
+    const fullUrl = `${baseUrl}/api/students/${id}`
+    const response = await simpleGETrequest(fullUrl)
+    return response
 }
 
 export async function fetchClasses() {
-    const cookieStore = cookies();
-    const token = cookieStore.get('token')?.value || null;
-    try {
-        const response = await fetch(`${baseUrl}/api/klasses`, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail);
-        }
-
-        const data = await response.json();
-
-        return data;
-    } catch (error: any) {
-        throw new Error(error);
-    }
+    const fullUrl = `${baseUrl}/api/klasses`
+    const response = await simpleGETrequest(fullUrl)
+    return response
+    
 }
 
 
 export async function getStudentImage(imageUrl: string) {
-    const cookieStore = cookies();
-    const token = cookieStore.get('token')?.value || null;
-    try {
-        const response = await fetch(imageUrl, {
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) {
-            const error = await response.json();
-            throw new Error(error.detail);
-        }
-
-        const buffer = await response.arrayBuffer();
-        const base64 = Buffer.from(buffer).toString('base64');
-        const mimeType = response.headers.get('content-type');
-        const dataUrl = `data:${mimeType};base64,${base64}`;
-
-        return dataUrl;
-    } catch (error: any) {
-        throw new Error(error);
-    }
+    const response = await getProtectedImage(imageUrl)
+    return response
 }
 
 export async function registerStudent(formData: FormData, id:string | null=null) {
-    const cookieStore = cookies();
-    const token = cookieStore.get('token')?.value || null;
-
-    if (token) {
-        try {
-            if(id){
-                const response = await fetch(`${baseUrl}/api/students/${id}/`, {
-                    method: "PATCH",
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    body: formData
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    return data;
-                // } else if (response.status === 400) {
-                //     throw new Error("Please filled up all of required fields")
-                } else {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || 'An error occurred');
-                }
-
-            }else{
-                const response = await fetch(`${baseUrl}/api/students/`, {
-                    method: "POST",
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                    body: formData
-                });
-                
-                if (response.ok) {
-                    const data = await response.json();
-                    return data;
-                } else if (response.status === 400) {
-                    throw new Error("Please filled up all of required fields")
-                } else {
-                    const errorData = await response.json();
-                    throw new Error(errorData.detail || 'An error occurred');
-                }
-    
-            }
-            
-        } catch (error: any) {
-            throw new Error(error.message || 'An error occurred');
-        }
-    } else {
-        throw new Error('Token not found');
+    let fullUrl
+    if (id){
+        fullUrl = `${baseUrl}/api/students/${id}/`
+        const response = formDataSubmit(fullUrl,formData,"PATCH")
+        return response
+    }else{
+        fullUrl = `${baseUrl}/api/students/`
+        const response = formDataSubmit(fullUrl, formData, 'POST')
+        return response
     }
+}
+
+export async function addStudentField() {
+    const fullUrl = `${baseUrl}/api/add_st_field/`
+    const response = await simpleGETrequest(fullUrl)
+    return response
+}
+
+export async function submitAddStudentInfo(data: FormData) {
+    const fullUrl = `${baseUrl}/api/add_st_info/`
+    const response = formDataSubmit(fullUrl,data,'POST')
+    return response
 }
 
