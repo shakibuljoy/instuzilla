@@ -11,10 +11,10 @@ import {
 import { useToast } from '@/components/ui/use-toast';
 import useStudentInfo from '@/hooks/useStudentInfo';
 
-
 export default function Page({ params }: { params: { id: string } }) {
   const {toast} = useToast();
   const {studentData, imageUrl, loading, error} = useStudentInfo(params.id);
+
 
 
   
@@ -22,7 +22,7 @@ export default function Page({ params }: { params: { id: string } }) {
   if(studentData){
     return (
       <div className="container max-w-[700px] mx-auto my-8 p-4">
-        <Card>
+        <Card id='pdf'>
           <CardHeader>
             <CardTitle className='text-indigo-500' >{studentData.first_name} {studentData.last_name}</CardTitle>
             <CardDescription>

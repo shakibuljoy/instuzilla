@@ -13,24 +13,24 @@ function isProtectedRoute(pathname: string, protectedPatterns: string[]): boolea
 export default async function middleware(request: NextRequest) {
   const response = NextResponse.next();
   const authUrl = ['/authentication/login'];
-  const protectedPatterns = ['/authentication/registration', '/students/[id]', '/finance/']; // Add dynamic route pattern
+  const publicUrl = ['/students/register-student'];
+  const protectedPatterns = ['/authentication/registration', '/finance/']; // Add dynamic route pattern
 
   const pathname = request.nextUrl.pathname;
-
-  if (authUrl.includes(pathname)) {
+  if(publicUrl.includes(pathname)){
+    return response;
+  }else if (authUrl.includes(pathname)) {
     const user = await verifyingUser();
 
     if (user && user.user_type !== 'student') {
-      console.log(user.user_type)
       return NextResponse.redirect(new URL('/', request.url));
     }
-  } else if (isProtectedRoute(pathname, protectedPatterns)) {
+  }else if (isProtectedRoute(pathname, protectedPatterns)) {
     const user = await verifyingUser();
 
     if (!user) {
       return NextResponse.redirect(new URL('/authentication/update-user', request.url));
     }
   }
-
-  return response;
+    return response;
 }

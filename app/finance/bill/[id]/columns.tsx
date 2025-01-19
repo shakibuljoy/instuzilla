@@ -16,7 +16,8 @@ import {
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import Link from "next/link";
 import { billSchema } from "@/lib/TypeOF";
-import { PaidHeader } from "@/app/components/PaidHeader";
+import { TwoWayHeader } from "@/app/components/TwoWayHeader";
+import BoolCell from "@/app/components/BoolCell";
 
 
 export const columns: ColumnDef<billSchema>[] = [
@@ -53,14 +54,14 @@ export const columns: ColumnDef<billSchema>[] = [
     accessorKey: "paid",
     header: ({column}) => {
       return (
-        <PaidHeader column={column} title="Status" />
+        <TwoWayHeader column={column} title="Status" status={{true: 'Paid', false:'Unpaid'}} />
       )
     },
     cell: ({ row }) => {
       const bill = row.original;
     
       return (
-        <span className={`text-slate-50 ${bill.paid ? "bg-green-500" : "bg-red-500"} rounded-md h-4 w-4 items-center p-1`} >{bill.paid ? "Paid" : "Unpaid"}</span>
+        <BoolCell status={bill.paid} title={{true: 'Paid', false: 'Unpaid'}} />
       )
     },
   },

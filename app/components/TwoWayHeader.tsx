@@ -22,11 +22,16 @@ interface DataTableColumnHeaderProps<TData, TValue>
     extends React.HTMLAttributes<HTMLDivElement> {
         column: Column<TData, TValue>
         title: string,
+        status: {
+            true: string,
+            false: string
+        }
     }
 
-export function PaidHeader<TData, TValue>({
+export function TwoWayHeader<TData, TValue>({
     column,
     title,
+    status,
     className
 }: DataTableColumnHeaderProps<TData, TValue>){
     return (
@@ -55,7 +60,7 @@ export function PaidHeader<TData, TValue>({
                         >
                             
                             
-                            {field ? 'Paid' : 'Unpaid'}
+                            {field ? status.true : status.false}
                         </DropdownMenuCheckboxItem>
                     ))}
                     

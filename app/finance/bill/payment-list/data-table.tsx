@@ -152,9 +152,7 @@ export function DataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
-              <div className="text-xl text-left border rounded-md p-1" >
-                Total Fund: <span className="font-bold text-right text-red-400">{totalAmount}</span> 
-              </div>
+              
       </div>
       <div className="rounded-md border bg-white shadow-lg">
         <Table>

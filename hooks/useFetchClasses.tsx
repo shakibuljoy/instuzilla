@@ -6,6 +6,7 @@ interface Klasses {
   id: string;
   full_klass:string;
   institute: string;
+  result_published: boolean;
   name: string;
   group: string | null;
   branch: string | null;

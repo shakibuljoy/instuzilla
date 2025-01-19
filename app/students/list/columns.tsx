@@ -17,6 +17,8 @@ import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import { StatusHeader } from "../../components/StatusHeader";
 import Link from "next/link";
 import { studentInfo } from "@/lib/TypeOF";
+import { TwoWayHeader } from "@/app/components/TwoWayHeader";
+import BoolCell from "@/app/components/BoolCell";
 
 
 export const columns: ColumnDef<studentInfo>[] = [
@@ -84,6 +86,18 @@ export const columns: ColumnDef<studentInfo>[] = [
       <DataTableColumnHeader column={column} title="Position" />
     ),
   },
+  {
+    accessorKey: "active",
+    header: ({ column }) => (
+      <TwoWayHeader column={column} title="Status" status={{true: 'Active', false:'Inactive'}} />
+    ),
+    cell: ({ row }) => {
+      const student = row.original;
+    
+      return (
+        <BoolCell status={student.active} title={{true: 'Active', false: 'Inactive'}} />
+      )
+  }},
   
   {
     id: "actions",
@@ -110,6 +124,7 @@ export const columns: ColumnDef<studentInfo>[] = [
             <DropdownMenuItem><Link href={`/students/${student.id}/edit-student/`} >Edit</Link></DropdownMenuItem>
             <DropdownMenuItem><Link href={`/students/${student.id}/attendance`} >Attendance</Link></DropdownMenuItem>
             <DropdownMenuItem><Link href={`/finance/bill/${student.id}`} >Bills</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href={`/students/${student.id}/submit-result`} >Result Submit</Link></DropdownMenuItem>
  
           </DropdownMenuContent>
         </DropdownMenu>

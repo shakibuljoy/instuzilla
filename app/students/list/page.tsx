@@ -1,19 +1,22 @@
 'use client'
 import { useEffect, useState } from "react"
-import { studentInfo } from "../[id]/page"
 import { DataTable } from "./data-table"
 import { getStudentList } from "@/utils/fetchStudent"
 import {columns } from "./columns"
 import { useToast } from "@/components/ui/use-toast"
+import { studentInfo } from "@/lib/TypeOF"
+import Loader from "@/app/components/Loader/Loader"
 
 
 
 export default function page() {
   const [studentList, setStudentList] = useState<studentInfo[] | null>(null);
   const {toast} = useToast()
+  const [loading, setLoading] = useState<boolean>(false)
 
   useEffect(() => {
     const getData = async () => {
+      setLoading(true);
       try{
         const data = await getStudentList();
       if(data as studentInfo[]){
@@ -23,13 +26,14 @@ export default function page() {
       }
 
       }catch(error:any){
+        setLoading(false);
         toast({
           variant:'destructive',
           title: "Error",
           description: error.message
         })
       }
-      
+      setLoading(false);
     }
     getData()
   },[])
@@ -40,7 +44,7 @@ export default function page() {
       {studentList ? (
         <DataTable columns={columns} data={studentList} />
       ):(
-        <h1 className="text-center">No student available to show!</h1>
+        loading ? <Loader /> : <h1 className="text-center text-2xl text-red-500">No data found</h1>
       )}
       
     </div>

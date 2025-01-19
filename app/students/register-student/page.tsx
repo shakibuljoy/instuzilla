@@ -18,6 +18,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
 import { Select, SelectGroup, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { publicFormDataSubmit } from "@/utils/commonFetch";
+import { useRouter } from "next/navigation";
 
 
 interface Klasses {
@@ -32,15 +34,17 @@ export default function Page() {
   const [loading, setLoading] = useState(false);
   const [classes, setClasses] = useState<Klasses[] | null>(null);
   const { toast } = useToast();
+  
+  const router = useRouter();
 
   useEffect(() => {
+    
     const getClasses = async () => {
       try{
         
       const response = await fetchClasses();
       if (response){
         setClasses(response)
-        console.log(response)
       }
       }catch(error:any){
         toast({
@@ -108,7 +112,6 @@ export default function Page() {
 
     try {
       const data = await registerStudent(formData);
-      console.log(formData)
       if (data) {
         toast({
           variant: "default",
@@ -116,7 +119,8 @@ export default function Page() {
           description: "Student registered successfully",
         });
         form.reset(defaultData);
-        setSelectedImage(null)
+        setSelectedImage(null);
+        router.push(`/students/${data.id}/additional-info`)
       }
     } catch (error: any) {
       toast({

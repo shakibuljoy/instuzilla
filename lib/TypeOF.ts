@@ -36,7 +36,8 @@ export type AttendList = {
     birth_date: string,
     birth_certificate_no: string,
     nid_no: string | null,
-    institute: string
+    institute: string,
+    active: boolean,
   }
 
   export type billSchema = 
@@ -78,4 +79,38 @@ export type AttendList = {
   title: string,
   field_type: 'file' | 'text' | 'number',
   required:boolean
+ }
+
+ export type AddStFieldData = {
+  id: string,
+  title: string,
+  field_type: 'file' | 'text' | 'number',
+  required:boolean,
+  value: string
+ }
+
+ export type SubjectField = {
+  id: string,
+  name: string,
+  code: string,
+  credit: number,
+  klass: string,
+ }
+
+ export type MarksType = {
+  id: string,
+  subject_title: string,
+  subject_code: string,
+  subject_credit: string,
+  mark: number,
+ }
+ export type ResultType = {
+  marks: MarksType[],
+  student: {
+    name: string,
+    student_id: string,
+    class: string,
+    total_marks: number,
+  }
+  
  }
