@@ -16,7 +16,12 @@ import {
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
 import Link from "next/link";
 import { PaymentType } from "@/lib/TypeOF";
+import { useMemo } from "react";
 
+
+const getTotalAmountSum = (data: any[]) => {
+  return data.reduce((total, item) => total + item.get_total_amount, 0);
+};
 
 
 export const columns: ColumnDef<PaymentType>[] = [
@@ -63,6 +68,11 @@ export const columns: ColumnDef<PaymentType>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Amount" />
     ),
+    footer: ({ table }) => {
+      const data = table.getFilteredRowModel().rows.map(row => row.original);
+      const totalAmountSum = useMemo(() => getTotalAmountSum(data), [data]);
+      return <div>Total: {totalAmountSum}</div>;
+    },
   },
   {
     accessorKey: "created_at",

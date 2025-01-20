@@ -46,8 +46,6 @@ export function DataTable<TData, TValue>({
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const [selectedId,setSelectedId] = React.useState<Array<Record<string, any>> | []>([])
-  const [totalAmount, setTotalAmount] = React.useState(0)
-
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
@@ -105,14 +103,7 @@ export function DataTable<TData, TValue>({
     }
   }, [rowSelection])
 
-  React.useEffect(() => {
-    const totalAmount = table
-      .getColumn('get_total_amount')
-      ?.getFacetedRowModel().rows.map(row => row.original.get_total_amount) // Extract amount from each row
-      .reduce((sum, amount) => sum + amount, 0); // Sum all amounts
-
-      setTotalAmount(totalAmount)
-  }, [])
+ 
   return (
     <div>
 
@@ -137,7 +128,7 @@ export function DataTable<TData, TValue>({
               .map((column) => {
                 
                 return (
-                  column.id !== ('actions' || 'select') &&
+                  column.id !== 'actions' && column.id !== 'select' &&
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalized"
