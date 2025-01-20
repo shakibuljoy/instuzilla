@@ -18,7 +18,7 @@ import { useRouter } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
 
-export default function page() {
+export default function Page() {
   // Getting authentication context
   const {signIn, user, error} = useContext(AuthContext);
   // Checking the state of user 

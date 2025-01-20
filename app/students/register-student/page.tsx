@@ -1,63 +1,107 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StudentSchema } from "@/utils/formSchema";
 import { useToast } from "@/components/ui/use-toast";
 import { fetchClasses, registerStudent } from "@/utils/fetchStudent";
 import {
   Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { z } from "zod";
-import { Select, SelectGroup, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { publicFormDataSubmit } from "@/utils/commonFetch";
+
 import { useRouter } from "next/navigation";
+import CustomFormField from "@/app/components/form/CustomFormField";
+import CustomFileField from "@/app/components/form/CustomFileField";
+import { Klasses } from "@/lib/TypeOF";
+import CustomSelector from "@/app/components/form/CustomSelector";
 
 
-interface Klasses {
-  id: string,
-  institute: string,
-  name: string,
-  group: string | null,
-  branch: string | null,
-  teachers: string[],
-}
+const formFields = [
+  {
+    name: "student_id",
+    label: "Student ID",
+    placeholder: "Enter Student ID",
+  },
+  {
+    name: "first_name",
+    label: "First Name",
+    placeholder: "Enter First Name",
+  },
+  {
+    name: "last_name",
+    label: "Last Name",
+    placeholder: "Enter Last Name",
+  },
+  {
+    name: "mobile",
+    label: "Mobile",
+    placeholder: "Enter Mobile",
+  },
+  {
+    name: "mothers_name",
+    label: "Mother's Name",
+    placeholder: "Enter Mother's Name",
+  },
+  {
+    name: "fathers_name",
+    label: "Father's Name",
+    placeholder: "Enter Father's Name",
+  },
+  {
+    name: "address",
+    label: "Address",
+    placeholder: "Enter Address",
+  },
+  {
+    name: "birth_date",
+    label: "Birth Date",
+    placeholder: "Enter Birth Date",
+  },
+  {
+    name: "birth_certificate_no",
+    label: "Birth Certificate No",
+    placeholder: "Enter Birth Certificate No",
+  },
+  {
+    name: "nid_no",
+    label: "NID No",
+    placeholder: "Enter NID No",
+  },
+];  
 export default function Page() {
   const [loading, setLoading] = useState(false);
   const [classes, setClasses] = useState<Klasses[] | null>(null);
   const { toast } = useToast();
+
+  const dataList = classes ? classes.map(klass => ({
+    key: klass.id,
+    value: klass.id.toString(),
+    title: klass.full_klass,
+  })): [];
   
   const router = useRouter();
+  const loadClasses = async () => {
+    try {
+      const response = await fetchClasses();
+      setClasses(response);
+    } catch (error: any) {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: error.message || "Failed to load classes.",
+      });
+      setClasses(null);
+    }
+  };
 
   useEffect(() => {
     
-    const getClasses = async () => {
-      try{
-        
-      const response = await fetchClasses();
-      if (response){
-        setClasses(response)
-      }
-      }catch(error:any){
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: error.message,
-        })
-        setClasses(null)
 
-    }
-    }
-    getClasses();
-  },[])
+    loadClasses();
+  }, []);
   const defaultData = {
     student_id: "",
     position: 1,
@@ -80,10 +124,6 @@ export default function Page() {
 
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
 
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files as FileList;
-    setSelectedImage(selectedFile[0]);
-  };
 
   const handleSubmit = async (values: z.infer<typeof StudentSchema>) => {
     setLoading(true);
@@ -101,12 +141,10 @@ export default function Page() {
       return;
     }
 
-    const safeValues = values as Record<string, any>;
-    for (const key in safeValues) {
-      if (key !== "image") {
-        formData.append(key, safeValues[key]);
-      }
-    }
+
+    Object.entries(values).forEach(([key, value]) => {
+      if (key !== "image") formData.append(key, value as string);
+    });
     
 
 
@@ -143,187 +181,25 @@ export default function Page() {
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-8">
             <div className="grid grid-cols-2 space-x-4">
               <div>
-                {/* Student ID */}
-                <FormField
-                  control={form.control}
-                  name="student_id"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Student ID</FormLabel>
-                      <FormControl>
-                        <Input placeholder="12345" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Class field */}
-              <FormField
-                  control={form.control}
-                  name="klass"
-                  render={({ field }) => (
-                  <FormItem>
-                      <FormLabel>Select Class </FormLabel>
+                {/* Form fields */}
+                {formFields.map((field) => (
+                  <CustomFormField key={field.name} control={form.control} label={field.label} name={field.name} />
                 
-                      <Controller 
-                      name="klass"
-                      render={({field}) => (
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a class" /> 
-                            </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectGroup>
-                          {classes && classes.map((klass) => (
-                            <SelectItem key={klass.id} value={klass.id.toString()} >{klass.name} {klass.group && klass.group} {klass.branch && klass.branch}</SelectItem>
-                          ))}
-                          </SelectGroup>
-                          
-                           
-                        </SelectContent>
-                    </Select>
-                      )}
-                      
-                      />
-                      <FormMessage />
-                  </FormItem>
-                  )}
-              />
-
-                {/* First Name */}
-                <FormField
-                  control={form.control}
-                  name="first_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>First Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Last Name */}
-                <FormField
-                  control={form.control}
-                  name="last_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Last Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Father's Name */}
-                <FormField
-                  control={form.control}
-                  name="fathers_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Father's Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Mother's Name */}
-                <FormField
-                  control={form.control}
-                  name="mothers_name"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Mother's Name</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                ))}
+                
               </div>
+
               <div>
-                {/* Date Of Birth */}
-                <FormField
-                  control={form.control}
-                  name="birth_date"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Date Of Birth</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Birth Certificate No */}
-                <FormField
-                  control={form.control}
-                  name="birth_certificate_no"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Birth Certificate No</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Mobile No. */}
-                <FormField
-                  control={form.control}
-                  name="mobile"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Mobile No.</FormLabel>
-                      <FormControl>
-                        <Input placeholder="017xxxxxxx" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                {/* Address No. */}
-                <FormField
-                  control={form.control}
-                  name="address"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Address</FormLabel>
-                      <FormControl>
-                        <Input placeholder="12 Road, Chittagong" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormItem>
-                  <FormLabel>Image</FormLabel>
-                  <FormControl>
-                    <Input onChange={handleImageChange} type="file" />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
+                {/* Class field */}
+                <CustomSelector control={form.control} label="Select Class" dataList={dataList} placeHolder="Select a Class" />
+             
+                {/* Image field */}
+               <CustomFileField label="Image" fileStateFn={setSelectedImage} />
                 <Button className="mt-2" type="submit">
                   {loading ? "Loading" : "Submit"}
                 </Button>
               </div>
+
             </div>
           </form>
         </Form>

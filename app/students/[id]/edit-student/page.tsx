@@ -3,7 +3,7 @@ import StudentRegisterForm from '@/app/components/StudentRegisterForm';
 import useStudentInfo from '@/hooks/useStudentInfo'
 import React from 'react'
 
-export default function page({params}:{params: {id:string}}) {
+export default function Page({params}:{params: {id:string}}) {
   const {studentData, imageUrl, loading, error} = useStudentInfo(params.id);
 
   if (loading) {

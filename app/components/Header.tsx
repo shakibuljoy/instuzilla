@@ -30,8 +30,8 @@ export default function Header() {
             <span className="sr-only">Acme Inc</span>
           </Link>
           <NavDropDown label="Student" items={[
-            <Link href="/students/register-student/" className="text-muted-foreground transition-colors hover:text-foreground">Register Student</Link>,
-            <Link href="/students/list/" className="text-muted-foreground transition-colors hover:text-foreground">Student</Link>
+            <Link key={1} href="/students/register-student/" className="text-muted-foreground transition-colors hover:text-foreground">Register Student</Link>,
+            <Link key={2} href="/students/list/" className="text-muted-foreground transition-colors hover:text-foreground">Student</Link>
           ]} />
           <Link
             href="/authentication/registration"

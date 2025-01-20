@@ -1,17 +1,9 @@
 import { useToast } from '@/components/ui/use-toast';
+import { Klasses } from '@/lib/TypeOF';
 import { fetchClasses } from '@/utils/fetchStudent';
 import React, { useEffect, useState } from 'react'; // Assuming React usage
 
-interface Klasses {
-  id: string;
-  full_klass:string;
-  institute: string;
-  result_published: boolean;
-  name: string;
-  group: string | null;
-  branch: string | null;
-  teachers: string[];
-}
+
 
 export default function useFetchClasses() {
   const [classes, setClasses] = useState<string[]>([]);

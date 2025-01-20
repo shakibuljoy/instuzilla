@@ -1,6 +1,7 @@
 "use client";
 import React, {useMemo, useState } from "react";
 import { PopupDetails } from "./PopupDetails";
+import { Key } from "lucide-react";
 
 type LeaveType = {
   date: string;
@@ -96,7 +97,7 @@ export default function Calendar({leave_days}:{leave_days:LeaveType[] }) {
         // const data = (((firstDayOfWeek+1) +dayOfMonth)%7);
         // const isWeekend = data===0||data===1
         return (
-          <PopupDetails
+          <PopupDetails key={index}
           title={isAbscent.status && isAbscent.type || "Presents"}
           description={`He/She is ${isAbscent.status && isAbscent.type || "Presents"} on ${formattedDate}`}
           status={isAbscent.status && isAbscent.type? isAbscent.type: "presents"}
@@ -142,8 +143,9 @@ const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
           <div className="grid grid-cols-7 gap-2 p-4">
             {/* Calendar Days Go Here */}
 
-            {daysOfWeek.map((day) => (
-              <div className="text-center font-semibold">{day}</div>
+            {daysOfWeek.map((day, index) => (
+              
+              <div key={index} className="text-center font-semibold">{day}</div>
             ))}
             {/* Create empty boxes for days before the first day of the month */}
             {memoEmptyBoxes}

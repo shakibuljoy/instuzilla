@@ -9,7 +9,7 @@ import Loader from "@/app/components/Loader/Loader"
 
 
 
-export default function page() {
+export default function Page() {
   const [studentList, setStudentList] = useState<studentInfo[] | null>(null);
   const {toast} = useToast()
   const [loading, setLoading] = useState<boolean>(false)

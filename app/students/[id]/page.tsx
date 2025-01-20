@@ -39,8 +39,8 @@ export default function Page({ params }: { params: { id: string } }) {
                 <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>First Name:</strong> {studentData.first_name}</p>
                 <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Last Name:</strong> {studentData.last_name}</p>
                 <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Mobile:</strong> {studentData.mobile}</p>
-                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Mother's Name:</strong> {studentData.mothers_name}</p>
-                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Father's Name:</strong> {studentData.fathers_name}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>{"Mother's Name:"}</strong> {studentData.mothers_name}</p>
+                <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>{"Father's Name:"}</strong> {studentData.fathers_name}</p>
                 <p className='p-2 bg-slate-50 border border-indigo-500 rounded-md text-indigo-700'><strong>Address:</strong> {studentData.address}</p>
               </div>
               <div className='space-y-2'>

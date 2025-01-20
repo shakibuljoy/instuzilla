@@ -11,7 +11,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { z } from 'zod';
 import { Select, SelectGroup, SelectContent, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { studentInfo } from '../students/[id]/page';
+import { studentInfo } from '@/lib/TypeOF';
+
 
 interface Klasses {
   id: string;
@@ -232,7 +233,7 @@ export default function StudentRegisterForm({ instance = null, instance_image = 
                 name="fathers_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Father's Name</FormLabel>
+                    <FormLabel>{"Father's Name"}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>
@@ -247,7 +248,7 @@ export default function StudentRegisterForm({ instance = null, instance_image = 
                 name="mothers_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Mother's Name</FormLabel>
+                    <FormLabel>{"Mother's Name"}</FormLabel>
                     <FormControl>
                       <Input {...field} />
                     </FormControl>

@@ -17,7 +17,16 @@ export type AttendList = {
     cause: string,
   }
 
-
+  export interface Klasses {
+    id: string;
+    full_klass:string;
+    institute: string;
+    result_published: boolean;
+    name: string;
+    group: string | null;
+    branch: string | null;
+    teachers: string[];
+  }
   export type studentInfo = {
     id:string,
     admission_date:string,

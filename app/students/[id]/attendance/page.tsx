@@ -3,7 +3,7 @@ import AttendanceDate from '@/app/components/AttendanceDate'
 import { MonthPicker } from '@/app/components/MonthSelector'
 import { useStudentAttendance } from '@/hooks/fetchAttendence';
 import React, { useState } from 'react'
-export default function page({params}:{params:{id:string}}) {
+export default function Page({params}:{params:{id:string}}) {
 
   const months = [
     "January", "February", "March", "April", "May", "June",
@@ -21,8 +21,8 @@ export default function page({params}:{params:{id:string}}) {
     <div className='flex flex-col shadow-md bg-slate-50 px-8 py-4 space-y-2 w-52 m-auto'>
       <h1>{attendenceList[0]?.student.first_name}  {attendenceList[0]?.student.last_name}</h1>
       {date && <MonthPicker date={date} setDate={setDate} />}
-      {date && attendenceList.map(attendence => (
-        <AttendanceDate date={attendence.date.slice(8)} presents={attendence.presents} cause={attendence.cause}/>
+      {date && attendenceList.map((attendence, index) => (
+        <AttendanceDate key={index} date={attendence.date.slice(8)} presents={attendence.presents} cause={attendence.cause}/>
       ))}
     </div>
   )

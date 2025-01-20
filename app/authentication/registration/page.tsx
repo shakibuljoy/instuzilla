@@ -20,7 +20,7 @@ import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 
 
-export default function page() {
+export default function Page() {
     const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(false);
     const {user} = useContext(AuthContext);
