@@ -14,9 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
-import Link from "next/link";
 import { PaymentType } from "@/lib/TypeOF";
-import { useMemo } from "react";
 
 
 const getTotalAmountSum = (data: any[]) => {
@@ -70,7 +68,7 @@ export const columns: ColumnDef<PaymentType>[] = [
     ),
     footer: ({ table }) => {
       const data = table.getFilteredRowModel().rows.map(row => row.original);
-      const totalAmountSum = useMemo(() => getTotalAmountSum(data), [data]);
+      const totalAmountSum = getTotalAmountSum(data);
       return <div>Total: {totalAmountSum}</div>;
     },
   },
