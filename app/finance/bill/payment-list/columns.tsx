@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
-import { PaymentType } from "@/lib/TypeOF";
+import { PaymentSchema, PaymentType } from "@/lib/TypeOF";
 
 
 const getTotalAmountSum = (data: any[]) => {
@@ -22,7 +22,7 @@ const getTotalAmountSum = (data: any[]) => {
 };
 
 
-export const columns: ColumnDef<PaymentType>[] = [
+export const columns: ColumnDef<PaymentSchema>[] = [
   
   {
     id: "select",

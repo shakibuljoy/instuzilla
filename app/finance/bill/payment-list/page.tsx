@@ -2,11 +2,12 @@
 import { DataTable } from "./data-table"
 import { columns } from "./columns"
 import { useFetchUserCreatedPayment } from "@/hooks/useFetchBill";
+import { PaymentSchema } from "@/lib/TypeOF";
 
 
 
 export default function Page() {
-  const {paymentList} = useFetchUserCreatedPayment()
+  const {paymentList}: { paymentList: PaymentSchema[] } = useFetchUserCreatedPayment()
 
 
 
