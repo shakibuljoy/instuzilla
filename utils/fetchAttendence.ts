@@ -153,7 +153,7 @@ export async function fetchStudentAttendance( id:string, month:number, year:stri
     const token = cookieStore.get('token')?.value || null;
     if (token){
           try {
-            const response = await fetch(`${baseUrl}/api/student-attendance/${id}?month=${month}&year=${year}`, {
+            const response = await fetch(`${baseUrl}/api/student-attendance/${id}/?month=${month}&year=${year}`, {
                 method: "GET",
                 headers: {
                     'Authorization': `Bearer ${token}`,

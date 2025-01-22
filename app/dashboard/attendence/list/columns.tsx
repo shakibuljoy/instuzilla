@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
-import { StatusHeader } from "../../components/StatusHeader";
+import { StatusHeader } from "../../../components/StatusHeader";
 import Link from "next/link";
 import { AttendList } from "@/lib/TypeOF";
 import { PresentsHeader } from "@/app/components/PresentsHeader";

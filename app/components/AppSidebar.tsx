@@ -1,4 +1,4 @@
-import { Calendar, Home, Inbox, Search, Settings, LogOut } from "lucide-react"
+import { Calendar, AlarmClockPlus,Search, Settings, LogOut, BookUserIcon, CalendarCheck } from "lucide-react"
 
 import {
   Sidebar,
@@ -10,28 +10,43 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
 import { Button } from "@/components/ui/button"
 
 // Menu items.
 const items = [
   {
-    title: "Home",
-    url: "#",
-    icon: Home,
+    title: "Student",
+    url: "/dashboard/students/list",
+    icon: BookUserIcon,
+    
   },
   {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
+    title: "Attendance",
+    url: "/dashboard/attendence/list",
+    icon: CalendarCheck,
+    
   },
   {
-    title: "Calendar",
+    title: "Give Attendance",
     url: "#",
-    icon: Calendar,
+    icon: AlarmClockPlus,
+    sub: [
+      {
+        title: "8th Business",
+        url: "/dashboard/attendence/1",
+      },
+      {
+        title: "7th",
+        url: "#",
+      },
+    ],
   },
   {
-    title: "Search",
+    title: "Authetication",
     url: "#",
     icon: Search,
   },
@@ -50,14 +65,28 @@ export function AppSidebar() {
           <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+              {items.map((item, index) => (
+
+                <SidebarMenuItem key={index}>
                   <SidebarMenuButton asChild>
                     <a href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
                     </a>
                   </SidebarMenuButton>
+                    {item.sub !== undefined &&
+                    <SidebarMenuSub>
+                      {item.sub.map((subItem) => (
+                        <SidebarMenuSubItem key={subItem.title}>
+                          <SidebarMenuSubButton asChild>
+                            <a href={subItem.url}>
+                              <span>{subItem.title}</span>
+                            </a>
+                          </SidebarMenuSubButton>
+                        </SidebarMenuSubItem>
+                      ))}
+                    </SidebarMenuSub>
+                  }
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>

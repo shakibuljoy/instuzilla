@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import {  MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox"
@@ -14,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
-import { StatusHeader } from "../../components/StatusHeader";
+import { StatusHeader } from "../../../components/StatusHeader";
 import Link from "next/link";
 import { studentInfo } from "@/lib/TypeOF";
 import { TwoWayHeader } from "@/app/components/TwoWayHeader";
@@ -120,11 +120,12 @@ export const columns: ColumnDef<studentInfo>[] = [
               Copy Student ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link href={`/students/${student.id}`} >View</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href={`/students/${student.id}/edit-student/`} >Edit</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href={`/students/${student.id}/attendance`} >Attendance</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href={`/finance/bill/${student.id}`} >Bills</Link></DropdownMenuItem>
-            <DropdownMenuItem><Link href={`/students/${student.id}/submit-result`} >Result Submit</Link></DropdownMenuItem>
+            <DropdownMenuItem asChild><Link href={`/dashboard/students/${student.id}`} >View</Link></DropdownMenuItem>
+            <DropdownMenuItem asChild><Link href={`/dashboard/students/${student.id}/edit-student/`} >Edit</Link></DropdownMenuItem>
+            <DropdownMenuItem asChild><Link href={`/dashboard/students/${student.id}/attendance`} >Attendance</Link></DropdownMenuItem>
+            <DropdownMenuItem asChild><Link href={`/dashboard/finance/bill/${student.id}`} >Bills</Link></DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem asChild><Link href={`/dashboard/students/${student.id}/submit-result`} >Result Submit</Link></DropdownMenuItem>
  
           </DropdownMenuContent>
         </DropdownMenu>

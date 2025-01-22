@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Header from "./components/Header";
 import { AuthenticationProvider } from "./context/AuthContext";
 import { Toaster } from "@/components/ui/toaster";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
@@ -33,7 +32,7 @@ export default async function RootLayout({
       <main className="flex flex-1">
       
         <SidebarTrigger />
-        <div className="flex-1 items-center sm:gap-4 sm:py-4 sm:pl-14">
+        <div className="flex-1 mx-auto items-center sm:gap-4 sm:py-4 sm:pl-14 md:w-7xl">
           {children}
         </div>
       </main>

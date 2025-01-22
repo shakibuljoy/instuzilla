@@ -1,20 +1,24 @@
 "use client";
-import React, {useMemo, useState } from "react";
+import React, {useEffect, useMemo, useState } from "react";
 import { PopupDetails } from "./PopupDetails";
 import { Key } from "lucide-react";
 
 type LeaveType = {
   date: string;
-  type: "holiday" | "abscent" | "leave" | "weekend";
+  type: "present" | "holiday" | "abscent" | "leave" | "weekend";
   cause: string | null;
 }
-export default function Calendar({leave_days}:{leave_days:LeaveType[] }) {
+export default function Calendar({leave_days, setDate, date}:{leave_days:LeaveType[], setDate:React.Dispatch<React.SetStateAction<{month:string, year:number, numberMonth:number}>>, date:{month:string, year:number, numberMonth:number}}) {
   const currentDate = new Date();
   let currentYear = currentDate.getFullYear();
   let currentMonth = currentDate.getMonth();
 
   const [year, setYear] = useState(currentYear);
   const [month, setMonth] = useState(currentMonth);
+
+  useEffect(() => {
+    setDate({...date, year: year, numberMonth: month});
+  }, [year, month]);
   
   const abscentChecker = useMemo(() => {
    const AbscentDetails:{days:number[],months:number[],years:number[]} = {
@@ -66,6 +70,8 @@ export default function Calendar({leave_days}:{leave_days:LeaveType[] }) {
         return "bg-gray-500 bg-opacity-5 text-gray-500"
       case "leave":
         return "bg-orange-700 bg-opacity-5 text-red-500"
+      case "present":
+        return "bg-green-500 bg-opacity-5 text-green-500"
       default:
         return null;
 

@@ -6,6 +6,7 @@ import {columns } from "./columns"
 import { useToast } from "@/components/ui/use-toast"
 import { studentInfo } from "@/lib/TypeOF"
 import Loader from "@/app/components/Loader/Loader"
+import { useSidebar } from "@/components/ui/sidebar"
 
 
 
@@ -13,6 +14,7 @@ export default function Page() {
   const [studentList, setStudentList] = useState<studentInfo[] | null>(null);
   const {toast} = useToast()
   const [loading, setLoading] = useState<boolean>(false)
+  const {setOpen} = useSidebar();
 
   useEffect(() => {
     const getData = async () => {
@@ -21,6 +23,7 @@ export default function Page() {
         const data = await getStudentList();
       if(data as studentInfo[]){
         setStudentList(data)
+        setOpen(false);
       }else{
         setStudentList(null);
       }
