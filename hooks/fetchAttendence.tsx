@@ -13,6 +13,7 @@ export default function useFetchAttendence(klass_id:string | null, date?:string)
         const attendence = await fetchAttendence(klass_id,undefined, date)
       if(attendence){
         setAttendenceList(attendence)
+        console.log(attendence);
       }
       }catch(error:any){
         toast({

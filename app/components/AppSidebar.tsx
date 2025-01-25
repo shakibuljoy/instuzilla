@@ -1,4 +1,4 @@
-import { Calendar, AlarmClockPlus,Search, Settings, LogOut, BookUserIcon, CalendarCheck } from "lucide-react"
+import { UserCheck, AlarmClockPlus, Settings, LogOut, BookUserIcon, CalendarCheck } from "lucide-react"
 
 import {
   Sidebar,
@@ -14,7 +14,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
-import { Button } from "@/components/ui/button"
 
 // Menu items.
 const items = [
@@ -48,7 +47,17 @@ const items = [
   {
     title: "Authetication",
     url: "#",
-    icon: Search,
+    icon: UserCheck,
+    sub: [
+      {
+        title: "Login",
+        url: "/authentication/login",
+      },
+      {
+        title: "Register",
+        url: "/authentication/registration",
+      },
+    ],
   },
   {
     title: "Settings",

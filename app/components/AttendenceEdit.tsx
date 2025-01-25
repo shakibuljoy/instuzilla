@@ -15,12 +15,14 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Label } from '@/components/ui/label';
+import { useRouter } from 'next/navigation';
 
 export default function AttendenceEdit({attendence_id, children}:{attendence_id:string, children:React.ReactNode}) {
     const {toast} = useToast();
     const {attendence, setAttendence} = useEditAttendence(attendence_id);
     const [cause, setCause] = useState('');
     const [presents, setPresents] = useState('false');
+    const router = useRouter();
 
     useEffect(() => {
       if(attendence){
@@ -46,6 +48,8 @@ export default function AttendenceEdit({attendence_id, children}:{attendence_id:
               title: "Error",
               description: error.message
             })
+          }finally{
+            router.push(`/dashboard/attendence/list/?klass=${attendence?.klass}`);
           }
       }
   return (

@@ -34,6 +34,8 @@ import {
 import { Filter } from "lucide-react";
 import SearchTable from "@/app/components/SearchTable";
 import PyamentCard from "@/app/components/PaymentCart";
+import OnlinePayamentCard from "@/app/components/OnlinePaymentCart";
+import AuthContext from "@/app/context/AuthContext";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -51,6 +53,7 @@ export function DataTable<TData, TValue>({
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
+  const {user} = React.useContext(AuthContext);
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -129,7 +132,7 @@ export function DataTable<TData, TValue>({
               .map((column) => {
                 
                 return (
-                  column.id !== ('actions' || 'select') &&
+                  column.id !== 'actions' && column.id !== 'select' &&
                   <DropdownMenuCheckboxItem
                     key={column.id}
                     className="capitalized"
@@ -145,10 +148,16 @@ export function DataTable<TData, TValue>({
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <PyamentCard bills={selectedId} >
+        <OnlinePayamentCard bills={selectedId} >
           
-          <Button disabled={selectedId.length === 0} >{selectedId.length > 0 ? "Pay Now" : "Select to pay"}</Button>
+          <Button disabled={selectedId.length === 0} >{selectedId.length > 0 ? "Online Pay Now" : "Select to pay"}</Button>
+          </OnlinePayamentCard>
+          {user?.user_type === 'administrator' && 
+          (
+          <PyamentCard bills={selectedId}> 
+          <Button disabled={selectedId.length === 0} >{selectedId.length > 0 ? "Pay Cash Now" : "Select to pay"}</Button>
           </PyamentCard>
+        )}
       </div>
       <div className="rounded-md border bg-white shadow-lg">
         <Table>

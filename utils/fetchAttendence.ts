@@ -1,9 +1,87 @@
 "use server"
+import { SingleAttend } from "@/lib/TypeOF";
 import { cookies } from "next/headers";
 
 const baseUrl = 'http://127.0.0.1:8000';
 
-export async function fetchAttendence( id:string, formData?: FormData, date?: string){
+// export async function fetchAttendence( id:string, formData?: FormData, date?: string){
+//     const cookieStore = cookies();
+//     const token = cookieStore.get('token')?.value || null;
+//     if (token){
+//         try{
+//             if(formData !== undefined){
+//                 const response = await fetch(`${baseUrl}/api/attendence/${id}/`, {
+//                     method: "POST",
+//                     headers: {
+//                         'Authorization': `Bearer ${token}`,
+//                     },
+//                     body: formData
+//                 });
+    
+//                 if(response.ok && response.status === 201){
+//                     const data = await response.json();
+//                     return data;
+//                 }else{
+//                     const error = await response.json();
+//                     if (error.detail) {
+//                         throw new Error(error.detail)
+//                     } else {
+//                         // Handle field-specific errors
+//                         Object.keys(error).forEach((field) => {
+//                             throw new Error(`${error[field].join(' ')}`)
+//                         });
+//                     }
+//                 }
+//             }else{
+//                 const dateUrlgenerator = (date?:string) => {
+//                     if(date!==undefined){
+//                         return `${baseUrl}/api/attendence/${id}?date=${date}`
+//                     }else{
+//                         return `${baseUrl}/api/attendence/${id}/`
+//                     }
+//                 }
+//                 const response = await fetch(dateUrlgenerator(date), {
+//                     method: "GET",
+//                     headers: {
+//                         'Authorization': `Bearer ${token}`,
+//                     },
+//                 });
+    
+//                 if(response.ok && response.status === 200){
+//                     const data = await response.json();
+//                     return data;
+//                 }else{
+//                     const error = await response.json();
+//                     console.log(error)
+//                     if (error.detail) {
+//                         throw new Error(error.detail)
+//                     } else {
+//                         // Handle field-specific errors
+//                         Object.keys(error).forEach((field) => {
+//                             throw new Error(`${error[field].join(' ')}`)
+//                         });
+//                     }
+//                 }
+//             }
+           
+//         }catch(error:any){
+//             console.log(error)
+//             if (error.detail) {
+//                 throw new Error(error.detail)
+//             } else {
+//                 // Handle field-specific errors
+//                 Object.keys(error).forEach((field) => {
+//                     throw new Error(`${error[field].join(' ')}`)
+//                 });
+//             }
+//         throw new Error(error.message || "Server connection failed")
+        
+//     }
+// }}
+
+
+
+export async function fetchAttendence( id:string, formData?: SingleAttend[], date?: string){
     const cookieStore = cookies();
     const token = cookieStore.get('token')?.value || null;
     if (token){
@@ -13,8 +91,9 @@ export async function fetchAttendence( id:string, formData?: FormData, date?: st
                     method: "POST",
                     headers: {
                         'Authorization': `Bearer ${token}`,
+                        'Content-Type':'application/json'
                     },
-                    body: formData
+                    body: JSON.stringify(formData)
                 });
     
                 if(response.ok && response.status === 201){
@@ -64,19 +143,11 @@ export async function fetchAttendence( id:string, formData?: FormData, date?: st
             }
            
         }catch(error:any){
-            console.log(error)
-            if (error.detail) {
-                throw new Error(error.detail)
-            } else {
-                // Handle field-specific errors
-                Object.keys(error).forEach((field) => {
-                    throw new Error(`${error[field].join(' ')}`)
-                });
+            throw new Error(error.message || "Server connection failed")
             }
-        throw new Error(error.message || "Server connection failed")
         
     }
-}}
+}
 
 
 export async function fetchEditAttendence( id:string, formData?: FormData){

@@ -29,12 +29,12 @@ export default function Page({params}:{params:{id:string}}) {
         cause: attendence.cause
       }
     }))
-    console.log("Leave Dayes", attendenceList);
+    console.log(leaveDays);
   }, [attendenceList])
 
 
   
-
+const sample_data = [{date: '24-01-2025', cause: '', type:'present'}, {date: '22-01-2025', cause: '', type:'abscent'}];
 
   return (
     <div className="container mx-auto py-10">

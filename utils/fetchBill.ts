@@ -26,6 +26,13 @@ export async function makePayment(bill_details:PaymentSchema){
     
 }
 
+export async function initiateOnlinePayment(bill_details:PaymentSchema){
+    const fullUrl = `${baseUrl}/finance/online-payment/`
+    const response = await simplePOSTrequest(fullUrl, bill_details)
+    return response
+    
+}
+
 export async function fetchUserCreatedPayment(){
     const fullUrl = `${baseUrl}/finance/user-created-payment/`
     const response = await simpleGETrequest(fullUrl)

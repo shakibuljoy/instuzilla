@@ -27,7 +27,7 @@ export default function Calendar({leave_days, setDate, date}:{leave_days:LeaveTy
     years: []
    }
    leave_days.map(dateString => {
-    if (dateString.cause) {
+    if (dateString.type !== 'present') {
       const parts = dateString.date.split('-'); // Split the string by '-'
         AbscentDetails.days.push(parseInt(parts[0], 10)); // Parse the second part (days) as an integer
         AbscentDetails.months.push(parseInt(parts[1], 10)); // Parse the second part (months) as an integer
@@ -36,7 +36,7 @@ export default function Calendar({leave_days, setDate, date}:{leave_days:LeaveTy
         
     });
     return AbscentDetails;
-  },[])
+  },[leave_days])
 
   // Create a date object for the first day of the specified month
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -104,11 +104,11 @@ export default function Calendar({leave_days, setDate, date}:{leave_days:LeaveTy
         // const isWeekend = data===0||data===1
         return (
           <PopupDetails key={index}
-          title={isAbscent.status && isAbscent.type || "Presents"}
-          description={`He/She is ${isAbscent.status && isAbscent.type || "Presents"} on ${formattedDate}`}
-          status={isAbscent.status && isAbscent.type? isAbscent.type: "presents"}
+          title={isAbscent.status && isAbscent.type || "Present"}
+          description={`He/She is ${isAbscent.status && isAbscent.type || "Present"} on ${formattedDate}`}
+          status={isAbscent.status && isAbscent.type? isAbscent.type: "present"}
           >
-            <div key={index} className={`text-center py-2 border cursor-pointer ${isCurrentDate ? 'bg-blue-500 text-white' : isAbscent.status && isAbscent.type ?  dayColors(isAbscent.type):''}`}>
+            <div key={index} className={`text-center py-2 border cursor-pointer ${isAbscent.status && isAbscent.type ?  dayColors(isAbscent.type):''}  ${isCurrentDate && "rounded-full border-violet-600"}`}>
             {dayOfMonth}
           </div>
           </PopupDetails>

@@ -14,18 +14,20 @@ import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button";
 import { loginFormSchema } from "@/utils/formSchema";
 import AuthContext from "@/app/context/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "@/components/ui/use-toast";
 
 
 export default function Page() {
+  const searchParams = useSearchParams();
+  const redirectUrl = searchParams.get("redirect") || "/dashboard";
   // Getting authentication context
   const {signIn, user, error} = useContext(AuthContext);
   // Checking the state of user 
   const router = useRouter();
   useEffect(() => {
     if(user){
-      return router.push('/')
+      return router.push(redirectUrl);
     }
   }, [user])
   

@@ -13,10 +13,11 @@ import {
 } from "@/components/ui/carousel"
 import { Button } from "@/components/ui/button"
 import useStudentList from "@/hooks/useStudentList"
-import { useRouter } from "next/navigation"
+import { z } from "zod"
+import { AttendenceSchema } from "@/utils/formSchema"
+import useFetchAttendence from "@/hooks/fetchAttendence"
 import { useToast } from "@/components/ui/use-toast"
 import { fetchAttendence } from "@/utils/fetchAttendence"
-import {SingleAttend } from "@/lib/TypeOF"
 
 
 
@@ -24,10 +25,9 @@ export default function Page({params}:{params:{id:string}}) {
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
   const [count, setCount] = React.useState(0)
-  const [attendenceList, setAttendenceList] = React.useState<SingleAttend[] | []>([]);
+  const {attendenceList, setAttendenceList} = useFetchAttendence(params.id);
   const studentList = useStudentList(params.id);
   const {toast} = useToast();
-  const router = useRouter();
 
   React.useEffect(() => {
     if (!api) {
@@ -43,27 +43,18 @@ export default function Page({params}:{params:{id:string}}) {
   }, [api,studentList])
 
 
-  const attendenceHandle = (data:SingleAttend) => {
-        if(data as SingleAttend){
-          setAttendenceList((prev) => [...prev, data]);
-        }
-        api?.scrollNext();
-  }
 
-
-  const submitAttendence = async () => {
-    console.log("Attendence", attendenceList);
-    if (attendenceList.length === studentList?.length) {
+  const presentHandle = async (values: z.infer<typeof AttendenceSchema>) => {
+    const formData = new FormData()
+    const safeValues = values as Record<string, any>;
+    for (const key in safeValues) {
+      formData.append(key, safeValues[key]);
+    }
+    if (values) {
       try {
-        const response = await fetchAttendence(params.id, attendenceList)
+        const response = await fetchAttendence(params.id, formData)
         if (response) {
-          toast({
-            variant:'default',
-            title: "Success",
-            description: "Successfully submitted attendence data"
-          })
-
-          router.push(`/dashboard/attendence/list`);
+          setAttendenceList(response)
         }
       } catch (error: any) {
         toast({
@@ -71,18 +62,14 @@ export default function Page({params}:{params:{id:string}}) {
           title: "Error",
           description: error.message
         })
+      } finally {
+        api?.scrollNext();
       }
-    }else{
-      toast({
-        variant:'destructive',
-        title: "Error",
-        description: "Give all attendece to the all student"
-      })
     }
   }
 
   function checkAttend(id: string) {
-    return attendenceList.find(o => o.student === id.toString()) || null;
+    return attendenceList.find(o => o.student.id === id) || null;
   }
   if(studentList?.length === 0){
     return (
@@ -91,9 +78,6 @@ export default function Page({params}:{params:{id:string}}) {
   }
   return (
     <div className="m-auto">
-      <Button className="m-12" onClick={submitAttendence} >
-        Submit Attendence
-      </Button>
       <Carousel setApi={setApi} className="w-full max-w-xs">
         <CarouselContent>
           {studentList && studentList.map((student, index) => {
@@ -117,7 +101,7 @@ export default function Page({params}:{params:{id:string}}) {
                       className="border border-dashed"
                       variant="default"
                       disabled={attendData !== null}
-                      onClick={() => attendenceHandle({presents: true, student: student.id.toString(), klass: student.klass, cause:'' })}
+                      onClick={() => presentHandle({presents: true, student: student.id.toString(), klass: student.klass })}
                     >
                       Present
                     </Button>
@@ -128,7 +112,7 @@ export default function Page({params}:{params:{id:string}}) {
                       className="border border-dashed"
                       variant="destructive"
                       disabled={attendData !== null}
-                      onClick={() => attendenceHandle({presents: false, student: student.id.toString(), klass: student.klass, cause:'' })}
+                      onClick={() => presentHandle({presents: false, student: student.id, klass: student.klass })}
                     >
                       Absent
                     </Button>

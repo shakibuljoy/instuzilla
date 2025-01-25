@@ -1,5 +1,15 @@
 import { boolean } from "zod"
 
+
+export type SingleAttend = {
+  student: string,
+  presents: boolean,
+  cause: string,
+  klass: string,
+  
+}
+
+
 export type AttendList = {
     id: string,
     klass: string,
@@ -16,6 +26,7 @@ export type AttendList = {
     date: string,
     cause: string,
   }
+
 
   export interface Klasses {
     id: string;

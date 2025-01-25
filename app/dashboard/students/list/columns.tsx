@@ -81,9 +81,9 @@ export const columns: ColumnDef<studentInfo>[] = [
     ),
   },
   {
-    accessorKey: "position",
+    accessorKey: "email",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Position" />
+      <DataTableColumnHeader column={column} title="Email" />
     ),
   },
   {

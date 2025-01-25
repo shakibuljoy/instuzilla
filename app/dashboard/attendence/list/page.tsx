@@ -14,8 +14,9 @@ import {
 
 import useFetchAttendence from "@/hooks/fetchAttendence"
 import useFetchClasses from "@/hooks/useFetchClasses"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { DatePicker } from "@/app/components/DatePicker"
+import { useSearchParams } from "next/navigation"
 
 
 export default function Page() {
@@ -23,6 +24,14 @@ export default function Page() {
   const [klass, setKlass] = useState<string | null>(null);
   const [date, setDate] = useState<Date>();
   const { attendenceList } = useFetchAttendence(klass,formatDate(date))
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.has("klass")) {
+      setKlass(searchParams.get("klass"));
+      
+    }
+  }, [searchParams]);
 
 
   function formatDate(date?:Date) {
@@ -37,6 +46,8 @@ export default function Page() {
 
   const handleClassSelect = (value: string) => {
     setKlass(value);
+    const params = new URLSearchParams();
+    params.set('klass', value)
   };
 
   return (

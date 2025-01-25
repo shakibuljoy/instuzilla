@@ -21,7 +21,7 @@ import {
     children:React.ReactNode,
     title: string,
     description:string,
-    status: "holiday" | "abscent" | "leave" | "weekend" | "presents"
+    status: "holiday" | "abscent" | "leave" | "weekend" | "present"
 
 }) {
     return (
