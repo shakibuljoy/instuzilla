@@ -1,6 +1,5 @@
 "use server"
 import { PaymentSchema } from "@/lib/TypeOF";
-import { cookies } from "next/headers";
 import { simpleGETrequest, simplePOSTrequest } from "./commonFetch";
 
 const baseUrl = 'http://3.111.34.12:8000/';
