@@ -2,7 +2,7 @@
 import { PaymentSchema } from "@/lib/TypeOF";
 import { simpleGETrequest, simplePOSTrequest } from "./commonFetch";
 
-const baseUrl = 'http://3.111.34.12:8000/';
+const baseUrl = 'http://3.111.34.12/';
 
 export async function fetchStudentBill(id:string) {
     const fullUrl = `${baseUrl}/finance/student-bills/${id}`

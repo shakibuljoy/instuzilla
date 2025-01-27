@@ -8,7 +8,7 @@ interface LoginResponse {
     refresh: string
 }
 
-const baseUrl = 'http://3.111.34.12:8000/'
+const baseUrl = 'http://3.111.34.12/'
 
 export const loginUser = async (credentials:z.infer<typeof loginFormSchema>) => {
     const cookieStore = cookies();
