@@ -25,15 +25,17 @@ interface JwtCustomPayload {
 const AuthContext = createContext<{
   signIn: (credentials: z.infer<typeof loginFormSchema>) => void;
   token: LoginResponse | null;
-  user: { name: string | null; user_type: string | null } | null;
+  user: { name: string | null; user_type: string | null } | null ;
   error: string;
   logOut: () => boolean;
+  loading: boolean;
 }>({
   signIn: async () => {},
   token: null,
   error: "",
   user: null,
   logOut: () => false,
+  loading: true,
 });
 
 export const AuthenticationProvider = ({
@@ -41,12 +43,14 @@ export const AuthenticationProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [user, setUser] = useState<{ name: string | null; user_type: string | null } | null>(null);
+  const [user, setUser] = useState<{ name: string | null; user_type: string | null } | null >(null);
   const [error, setError] = useState("");
   const [token, setToken] = useState<LoginResponse | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
+      setLoading(true)
       try {
         const userData = await gettingUser();
         if (userData) {
@@ -62,10 +66,13 @@ export const AuthenticationProvider = ({
             setToken(updatedToken);
           }else{
             logOut()
+            setLoading(false);
           }
         }
       } catch (err) {
         setError("An error occured when fetching user");
+      }finally{
+        setLoading(false);
       }
     };
     fetchUser();
@@ -73,6 +80,7 @@ export const AuthenticationProvider = ({
 
   const signIn = async (credentials: z.infer<typeof loginFormSchema>) => {
     setError("");
+    setLoading(true)
     try {
       const response = await loginUser(credentials);
       const data = await response;
@@ -91,6 +99,8 @@ export const AuthenticationProvider = ({
     } catch (err:any) {
       setError(err.message);
       return false;
+    }finally{
+      setLoading(false);
     }
   };
 
@@ -98,17 +108,20 @@ export const AuthenticationProvider = ({
 
 
   const logOut = () => {
+    setLoading(true);
     const loggingOut = logOutUser();
     if (loggingOut) {
       setUser(null);
       setToken(null);
+      setLoading(false);
       return true;
     }
+    setLoading(false);
     return false;
   };
 
   return (
-    <AuthContext.Provider value={{ signIn, token, error, user, logOut }}>
+    <AuthContext.Provider value={{ signIn, token, error, user, logOut, loading }}>
       {children}
     </AuthContext.Provider>
   );

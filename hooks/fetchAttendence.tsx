@@ -5,10 +5,11 @@ import React, { useState } from 'react'
 
 export default function useFetchAttendence(klass_id:string | null, date?:string) {
     const [attendenceList, setAttendenceList] = useState<AttendList[] | []>([])
+    const [loading, setLoading] = useState(false);
     const {toast} = useToast()
 
     const getAttendence = async (klass_id: string, date?:string) => {
-      
+      setLoading(true);
       try{
         const attendence = await fetchAttendence(klass_id,undefined, date)
       if(attendence){
@@ -21,6 +22,8 @@ export default function useFetchAttendence(klass_id:string | null, date?:string)
           title: 'Error',
           description: error.message
         })
+      }finally{
+        setLoading(false);
       }
       
     } 
@@ -36,6 +39,7 @@ export default function useFetchAttendence(klass_id:string | null, date?:string)
     {
         attendenceList:attendenceList,
         setAttendenceList:setAttendenceList,
+        loading:loading,
     }
   )
 }

@@ -17,13 +17,14 @@ import useFetchClasses from "@/hooks/useFetchClasses"
 import { useEffect, useState } from "react"
 import { DatePicker } from "@/app/components/DatePicker"
 import { useSearchParams } from "next/navigation"
+import TableSkeleton from "@/app/components/TableSkeleton"
 
 
 export default function Page() {
   const { classObject } = useFetchClasses();
   const [klass, setKlass] = useState<string | null>(null);
   const [date, setDate] = useState<Date>();
-  const { attendenceList } = useFetchAttendence(klass,formatDate(date))
+  const { attendenceList, loading } = useFetchAttendence(klass,formatDate(date))
   const searchParams = useSearchParams();
 
   useEffect(() => {
@@ -73,9 +74,10 @@ export default function Page() {
       
       {klass ? (
         attendenceList.length > 0 ? (
-          <DataTable columns={columns} data={attendenceList} />
+
+              <DataTable columns={columns} data={attendenceList} />
         ) : (
-          <h1 className="text-center">No attendance data available to show!</h1>
+          loading ? <TableSkeleton/> :<h1 className="text-center">No attendance data available to show!</h1>
         )
       ) : (
         <h1 className="text-center">Please select a class to view attendance.</h1>

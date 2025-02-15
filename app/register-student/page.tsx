@@ -21,9 +21,9 @@ import CustomSelector from "@/app/components/form/CustomSelector";
 
 const formFields = [
   {
-    name: "student_id",
-    label: "Student ID",
-    placeholder: "Enter Student ID",
+    name: "email",
+    label: "Email",
+    placeholder: "Enter Email",
   },
   {
     name: "first_name",
@@ -80,6 +80,7 @@ export default function Page() {
     key: klass.id,
     value: klass.id.toString(),
     title: klass.full_klass,
+    admission_open: klass.admission_open,
   })): [];
   
   const router = useRouter();
@@ -191,7 +192,7 @@ export default function Page() {
 
               <div>
                 {/* Class field */}
-                <CustomSelector control={form.control} label="Select Class" dataList={dataList} placeHolder="Select a Class" />
+                <CustomSelector control={form.control} label="Select Class" dataList={dataList.filter(item => item.admission_open)} placeHolder="Select a Class" />
              
                 {/* Image field */}
                <CustomFileField label="Image" fileStateFn={setSelectedImage} />

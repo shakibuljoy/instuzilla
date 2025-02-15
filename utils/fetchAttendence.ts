@@ -2,7 +2,7 @@
 import { SingleAttend } from "@/lib/TypeOF";
 import { cookies } from "next/headers";
 
-const baseUrl = 'http://3.111.34.12/';
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 
 // export async function fetchAttendence( id:string, formData?: FormData, date?: string){
 //     const cookieStore = cookies();

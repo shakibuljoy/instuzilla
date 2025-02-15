@@ -1,4 +1,6 @@
-import { UserCheck, AlarmClockPlus, Settings, LogOut, BookUserIcon, CalendarCheck } from "lucide-react"
+'use client'
+
+import { UserCheck, AlarmClockPlus, Settings, LogOut, BookUserIcon, CalendarCheck, ReceiptText, List } from "lucide-react"
 
 import {
   Sidebar,
@@ -14,9 +16,16 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import { useContext, useEffect } from "react"
+import AuthContext from "../context/AuthContext"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
+import { Button } from "@/components/ui/button"
 
 // Menu items.
-const items = [
+
+
+const admin_items = [
   {
     title: "Student",
     url: "/dashboard/students/list",
@@ -45,6 +54,19 @@ const items = [
     ],
   },
   {
+    title: "Finance",
+    url: "#",
+    icon: ReceiptText,
+    sub: [
+      {
+        title: "Payment List",
+        url: "/dashboard/finance/bill/payment-list",
+        icon: List
+
+      }
+    ]
+  },
+  {
     title: "Authetication",
     url: "#",
     icon: UserCheck,
@@ -66,7 +88,71 @@ const items = [
   },
 ]
 
+const student_items = [
+  {
+    title: "Attendance",
+    url: "/dashboard/attendence/list",
+    icon: CalendarCheck,
+    
+  },
+  {
+    title: "MyAttendence",
+    url: "/dashboard/students/99/attendance",
+    icon: AlarmClockPlus,
+  },
+  {
+    title: "Finance",
+    url: "#",
+    icon: ReceiptText,
+    sub: [
+      {
+        title: "Payment List",
+        url: "/dashboard/finance/bill/payment-list",
+
+      },
+      {
+        title: "Bills", 
+        url:"/dashboard/finance/bill/99"
+
+      }
+    ]
+  },
+  {
+    title: "Authetication",
+    url: "#",
+    icon: UserCheck,
+    sub: [
+      {
+        title: "Login",
+        url: "/authentication/login",
+      },
+      {
+        title: "Register",
+        url: "/authentication/registration",
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    url: "#",
+    icon: Settings,
+  },
+]
+
+
 export function AppSidebar() {
+  const {user, loading, logOut} = useContext(AuthContext);
+  const router = useRouter();
+
+  const items = user?.user_type === 'student' ? student_items : admin_items
+
+
+  useEffect(() => {
+    if(!user &&  !loading){
+      return router.push('/authentication/login');
+    }
+  }, [user, loading])
+
   return (
     <Sidebar variant="sidebar" collapsible="icon">
       <SidebarContent>
@@ -78,19 +164,19 @@ export function AppSidebar() {
 
                 <SidebarMenuItem key={index}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                     {item.sub !== undefined &&
                     <SidebarMenuSub>
                       {item.sub.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>
+                            <Link href={subItem.url}>
                               <span>{subItem.title}</span>
-                            </a>
+                            </Link>
                           </SidebarMenuSubButton>
                         </SidebarMenuSubItem>
                       ))}
@@ -104,13 +190,17 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SidebarContent>
-            
+            {
+              user && (
                 <SidebarMenuButton asChild isActive>
-                    <a href="" className="text-red-500">
+                    <Button onClick={logOut} >
                         <LogOut/>
-                        <span>Sign Out</span>
-                    </a>
+                        <span  className="text-red-500" >Log Out</span>
+                    </Button>
                 </SidebarMenuButton>
+              )
+            }
+                
         </SidebarContent>
       </SidebarFooter>
     </Sidebar>

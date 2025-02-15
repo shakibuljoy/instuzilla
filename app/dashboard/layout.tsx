@@ -18,16 +18,31 @@ export default async function RootLayout({
 
 
   return (
-      <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar />
-      <main className="flex flex-1">
+    //   <SidebarProvider defaultOpen={defaultOpen}>
+    //   <AppSidebar />
+    //   <main className="flex flex-1">
       
-        <SidebarTrigger />
-        <div className="flex-1 mx-auto items-center sm:gap-4 sm:py-4 sm:pl-14 md:w-7xl">
-          {children}
-        </div>
-      </main>
-    </SidebarProvider>
+    //     <SidebarTrigger />
+    //     <div className="flex-1 mx-auto items-center sm:gap-4 sm:py-4 sm:pl-14 md:w-7xl">
+    //       {children}
+    //     </div>
+    //   </main>
+    // </SidebarProvider>
+
+<SidebarProvider defaultOpen={defaultOpen}>
+<AppSidebar />
+<main className="flex flex-col sm:flex-row">
+  <SidebarTrigger
+  />
+  <div
+    className={`flex-1 mx-auto items-center sm:gap-4 sm:py-4 ${
+      defaultOpen ? 'sm:pl-14' : 'sm:pl-4'
+    } md:w-7xl`}
+  >
+    {children}
+  </div>
+</main>
+</SidebarProvider>
         
   );
 }

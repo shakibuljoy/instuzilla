@@ -5,9 +5,11 @@ import React, { useState } from 'react'
 
 export default function useFetchBill(student_id:string) {
     const [billList, setBillList] = useState<billSchema[] | []>([])
+    const [loading, setLoading] = useState(false);
     const {toast} = useToast()
 
     const getStudentBill = async (student_id:string) => {
+      setLoading(true);
       
       try{
         const bills = await fetchStudentBill(student_id)
@@ -20,6 +22,8 @@ export default function useFetchBill(student_id:string) {
           title: 'Error',
           description: error.message
         })
+      }finally{
+        setLoading(false);
       }
       
     } 
@@ -37,7 +41,8 @@ export default function useFetchBill(student_id:string) {
     {
         billList:billList,
         setBillList:setBillList,
-        refreshData:refreshData
+        refreshData:refreshData,
+        loading: loading,
     }
   )
 }
@@ -82,9 +87,11 @@ return (
 
 export function useFetchUserCreatedPayment() {
   const [paymentList, setPaymentList] = useState<PaymentSchema[] | []>([])
+  const [loading, setLoading] = useState(false);
   const {toast} = useToast()
 
   const getPayment = async () => {
+    setLoading(true);
     
     try{
       const payments = await fetchUserCreatedPayment()
@@ -97,6 +104,8 @@ export function useFetchUserCreatedPayment() {
         title: 'Error',
         description: error.message
       })
+    }finally{
+      setLoading(false);
     }
     
   } 
@@ -108,6 +117,7 @@ return (
   {
       paymentList:paymentList,
       setPaymentList:setPaymentList,
+      loading:loading
   }
 )
 }

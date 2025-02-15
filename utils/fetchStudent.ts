@@ -2,7 +2,7 @@
 import { cookies } from "next/headers";
 import { formDataSubmit, getProtectedImage, publicFormDataSubmit, publicGetRequest, publicRequest, simpleGETrequest, simplePOSTrequest } from "./commonFetch";
 
-const baseUrl = 'http://3.111.34.12/';
+const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 const instu_id = 'uphsc';
 
 export async function getStudentList(klass_id?: string) {

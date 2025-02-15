@@ -62,7 +62,7 @@ export const signupFormSchema = z.object({
 
 export const StudentSchema = z.object({
   id: z.number().optional(),
-  student_id: z.string().min(1, "Student ID is required"),
+  email: z.string().min(1, "Email is required").email("This is not a valid Email"),
   position: z.number().int(),
   klass: z.string().min(1, "Plese Select a Classes"),
   institute: z.string().optional(),

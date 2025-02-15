@@ -19,6 +19,7 @@ import Link from "next/link";
 import { studentInfo } from "@/lib/TypeOF";
 import { TwoWayHeader } from "@/app/components/TwoWayHeader";
 import BoolCell from "@/app/components/BoolCell";
+import UserCreation from "@/app/components/UserCreation";
 
 
 export const columns: ColumnDef<studentInfo>[] = [
@@ -87,8 +88,16 @@ export const columns: ColumnDef<studentInfo>[] = [
     ),
   },
   {
+    accessorKey: "user",
+    meta: "User Name",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="User Name" />
+    ),
+  },
+  {
     accessorKey: "active",
     header: ({ column }) => (
+  
       <TwoWayHeader column={column} title="Status" status={{true: 'Active', false:'Inactive'}} />
     ),
     cell: ({ row }) => {
@@ -96,6 +105,19 @@ export const columns: ColumnDef<studentInfo>[] = [
     
       return (
         <BoolCell status={student.active} title={{true: 'Active', false: 'Inactive'}} />
+      )
+  }},
+  {
+    accessorKey: "account_created",
+    meta: "Account",
+    header: ({ column }) => (
+      <TwoWayHeader column={column} title="Account" status={{true: 'Yes', false:'No'}} />
+    ),
+    cell: ({ row }) => {
+      const student = row.original;
+    
+      return (
+        <BoolCell status={student.account_created} title={{true: 'Yes', false: 'No'}} />
       )
   }},
   
@@ -126,6 +148,18 @@ export const columns: ColumnDef<studentInfo>[] = [
             <DropdownMenuItem asChild><Link href={`/dashboard/finance/bill/${student.id}`} >Bills</Link></DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild><Link href={`/dashboard/students/${student.id}/submit-result`} >Result Submit</Link></DropdownMenuItem>
+            {
+              !student.account_created && (
+                <DropdownMenuItem asChild>
+                <UserCreation username={student.email} student_id={student.student_id}>
+                  <Button variant="link" className="w-full text-left">Create Account
+                  </Button>
+                </UserCreation>
+                </DropdownMenuItem>
+              )
+            }
+           
+            
  
           </DropdownMenuContent>
         </DropdownMenu>

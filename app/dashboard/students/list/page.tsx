@@ -7,6 +7,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { studentInfo } from "@/lib/TypeOF"
 import Loader from "@/app/components/Loader/Loader"
 import { useSidebar } from "@/components/ui/sidebar"
+import TableSkeleton from "@/app/components/TableSkeleton"
 
 
 
@@ -46,8 +47,9 @@ export default function Page() {
     <div className="container mx-auto py-10  ">
       {studentList ? (
         <DataTable columns={columns} data={studentList} />
+        
       ):(
-        loading ? <Loader /> : <h1 className="text-center text-2xl text-red-500">No data found</h1>
+        loading ? <TableSkeleton /> : <h1 className="text-center text-2xl text-red-500">No data found</h1>
       )}
       
     </div>

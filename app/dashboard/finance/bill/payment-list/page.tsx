@@ -7,7 +7,7 @@ import { PaymentSchema } from "@/lib/TypeOF";
 
 
 export default function Page() {
-  const {paymentList}: { paymentList: PaymentSchema[] } = useFetchUserCreatedPayment()
+  const {paymentList, loading}: { paymentList: PaymentSchema[], loading:boolean } = useFetchUserCreatedPayment()
 
 
 
@@ -16,8 +16,9 @@ export default function Page() {
     <div className="container mx-auto py-10">
       
       {
-        paymentList.length > 0 ? (
-          <DataTable columns={columns} data={paymentList} />
+        paymentList.length > 0 || loading ? (
+            <DataTable columns={columns} data={paymentList} />
+          
         ) : (
           <h1 className="text-center">No Bill data available to show!</h1>
         )}

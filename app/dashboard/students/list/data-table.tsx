@@ -48,7 +48,12 @@ export function DataTable<TData, TValue>({
   );
 
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState<VisibilityState>({
+      mobile: false,
+      email: false,
+      user: false,
+      account_created: false,
+    });
 
   const [rowSelection, setRowSelection] = React.useState({});
   const table = useReactTable({
@@ -65,7 +70,7 @@ export function DataTable<TData, TValue>({
     state: {
       sorting,
       columnFilters,
-      columnVisibility,
+      columnVisibility: columnVisibility,
       rowSelection,
     },
   });

@@ -37,6 +37,7 @@ export type AttendList = {
     group: string | null;
     branch: string | null;
     teachers: string[];
+    admission_open: boolean;
   }
   export type studentInfo = {
     id:string,
@@ -58,6 +59,9 @@ export type AttendList = {
     nid_no: string | null,
     institute: string,
     active: boolean,
+    account_created: boolean,
+    email: string,
+    
   }
 
   export type billSchema = 

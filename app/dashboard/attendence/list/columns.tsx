@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { MoreHorizontal } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {Checkbox} from "@/components/ui/checkbox"
@@ -14,13 +14,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { DataTableColumnHeader } from "./DataTableColumnHeader";
-import { StatusHeader } from "../../../components/StatusHeader";
 import Link from "next/link";
 import { AttendList } from "@/lib/TypeOF";
 import { PresentsHeader } from "@/app/components/PresentsHeader";
 import AttendenceEdit from "@/app/components/AttendenceEdit";
-import { table } from "console";
-
 
 export const columns: ColumnDef<AttendList>[] = [
   
@@ -116,7 +113,7 @@ export const columns: ColumnDef<AttendList>[] = [
               Copy Student ID
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><Link href={`/students/${attendence.student.id}`} >View {attendence.student.first_name}</Link></DropdownMenuItem>
+            <DropdownMenuItem><Link href={`/dashboard/students/${attendence.student.id}`} >View {attendence.student.first_name}</Link></DropdownMenuItem>
             <AttendenceEdit attendence_id={attendence.id} ><Button>Edit Attendece</Button></AttendenceEdit>
           </DropdownMenuContent>
         </DropdownMenu>

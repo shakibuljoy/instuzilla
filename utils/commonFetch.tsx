@@ -249,12 +249,9 @@ export async function getProtectedImage(imageUrl: string) {
                 throw new Error(error.detail);
             }
     
-            const buffer = await response.arrayBuffer();
-            const base64 = Buffer.from(buffer).toString('base64');
-            const mimeType = response.headers.get('content-type');
-            const dataUrl = `data:${mimeType};base64,${base64}`;
+            const data = await response.json();
+            return data.image_url;
     
-            return dataUrl;
         } catch (error: any) {
             throw new Error(error);
         }

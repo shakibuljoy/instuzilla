@@ -1,36 +1,38 @@
+import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { verifyingUser } from './utils/fetchUser';
 
-import { NextRequest, NextResponse } from "next/server";
-import { verifyingUser } from "./utils/fetchUser";
+// Import your verifyingUser function
 
-function isProtectedRoute(pathname: string, protectedPatterns: string[]): boolean {
-  return protectedPatterns.some(pattern => {
-    // Convert the pattern to a regular expression
-    const regex = new RegExp(`^${pattern.replace(/\[.*?\]/g, '.*')}$`);
-    return regex.test(pathname);
-  });
-}
 
-export default async function middleware(request: NextRequest) {
-  const response = NextResponse.next();
-  const authUrl = ['/authentication/login'];
-  const publicUrl = ['/students/register-student'];
-  const protectedPatterns = ['/authentication/registration', '/finance/']; // Add dynamic route pattern
+// Middleware function
+export async function middleware(request: NextRequest) {
+  // Define protected routes
+  const protectedRoutes = ['/dashboard', '/authentication/logout'];
 
-  const pathname = request.nextUrl.pathname;
-  if(publicUrl.includes(pathname)){
-    return response;
-  }else if (authUrl.includes(pathname)) {
+  // Check if the current request path is a protected route
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  );
+
+  // If the route is protected, verify the user
+  if (isProtectedRoute) {
+    // Call the verifyingUser function to check if the user is authenticated
     const user = await verifyingUser();
 
-    if (user && user.user_type !== 'student') {
-      return NextResponse.redirect(new URL('/', request.url));
-    }
-  }else if (isProtectedRoute(pathname, protectedPatterns)) {
-    const user = await verifyingUser();
-
+    // If the user is not authenticated, redirect to the homepage
     if (!user) {
-      return NextResponse.redirect(new URL('/authentication/update-user', request.url));
+      const url = request.nextUrl.clone();
+      url.pathname = '/authentication/login';
+      return NextResponse.redirect(url);
     }
   }
-    return response;
+
+  // If the user is authenticated or the route is not protected, continue
+  return NextResponse.next();
 }
+
+// Define which paths the middleware should run on
+export const config = {
+  matcher: ['/dashboard/:path*', '/'], // Apply middleware to /dashboard and homepage
+};

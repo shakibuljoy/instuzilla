@@ -1,7 +1,7 @@
 "use client";
 import React, {useEffect, useMemo, useState } from "react";
 import { PopupDetails } from "./PopupDetails";
-import { Key } from "lucide-react";
+import { ArrowLeftCircle, ArrowRightCircle, Key } from "lucide-react";
 
 type LeaveType = {
   date: string;
@@ -104,8 +104,8 @@ export default function Calendar({leave_days, setDate, date}:{leave_days:LeaveTy
         // const isWeekend = data===0||data===1
         return (
           <PopupDetails key={index}
-          title={isAbscent.status && isAbscent.type || "Present"}
-          description={`He/She is ${isAbscent.status && isAbscent.type || "Present"} on ${formattedDate}`}
+          title={isAbscent.status && isAbscent.type || ''}
+          description={` ${isAbscent.status ? "He/She is "+ isAbscent.type : "Attendence not found"} on ${formattedDate}`}
           status={isAbscent.status && isAbscent.type? isAbscent.type: "present"}
           >
             <div key={index} className={`text-center py-2 border cursor-pointer ${isAbscent.status && isAbscent.type ?  dayColors(isAbscent.type):''}  ${isCurrentDate && "rounded-full border-violet-600"}`}>
@@ -132,18 +132,18 @@ const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
     <div className="bg-transparent flex items-center justify-center">
-      <div className="lg:w-8/12 md:w-9/12 sm:w-10/12 mx-auto p-4">
+      <div className="lg:w-8/12 md:w-9/12 w-full mx-auto p-4">
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <div className={`flex items-center justify-between px-6 py-3 ${abscentChecker.months.indexOf(month+1)+1 >0 && abscentChecker.years.indexOf(year)+1 >0 ? "bg-red-700": "bg-gray-700"}`}>
-            <button onClick={prevMonth} id="prevMonth" className="text-white">
-              Previous
+            <button onClick={prevMonth} id="prevMonth" className="text-white text-sm md:text-xl">
+            <ArrowLeftCircle/>
             </button>
             <h2
               id="currentMonth"
-              className="text-white"
+              className="text-white text-md md:text-xl"
             >{`${monthNames[month]} ${year}`}</h2>
-            <button onClick={nextMonth} id="nextMonth" className="text-white">
-              Next
+            <button onClick={nextMonth} id="nextMonth" className="text-white text-sm md:text-xl">
+              <ArrowRightCircle/>
             </button>
           </div>
           <div className="grid grid-cols-7 gap-2 p-4">
