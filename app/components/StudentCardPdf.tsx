@@ -73,7 +73,7 @@ const AdmitCard = ({ student_id="DD6373DE", class_name="6th", exam_name="Annual 
       </View>
 
       {/* Logo */}
-      <Image src="https://via.placeholder.com/50" style={styles.logo} />
+      <Image src="https://via.placeholder.com/50"  style={styles.logo} />
 
       {/* Admit Card Text */}
       <Text style={styles.admitCardText}>ADMIT CARD</Text>
@@ -84,7 +84,7 @@ const AdmitCard = ({ student_id="DD6373DE", class_name="6th", exam_name="Annual 
         <View style={styles.line} />
       </View>
       <View style={styles.section}>
-        <Text>Father's Name</Text>
+        <Text>{`Father's Name`}</Text>
         <View style={styles.line} />
       </View>
       <View style={styles.section}>
@@ -96,8 +96,8 @@ const AdmitCard = ({ student_id="DD6373DE", class_name="6th", exam_name="Annual 
 
       {/* Instruction Section */}
       <Text style={styles.instruction}>Instruction</Text>
-      <Text style={styles.instruction}> {'->'} Don't carry Mobile in the Exam Hall</Text>
-      <Text style={styles.instruction}> {'->'} Don't carry Digital watch in the Exam Hall</Text>
+      <Text style={styles.instruction}> {`->`} Don't carry Mobile in the Exam Hall</Text>
+      <Text style={styles.instruction}> {`->`} Don't carry Digital watch in the Exam Hall</Text>
 
       {/* Signature Section */}
       <View style={styles.signature}>
