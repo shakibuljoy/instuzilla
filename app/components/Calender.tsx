@@ -132,7 +132,7 @@ const daysOfWeek = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
   return (
     <div className="bg-transparent flex items-center justify-center">
-      <div className="lg:w-8/12 md:w-9/12 w-full mx-auto p-4">
+      <div className="w-full md:w-[650px]  mx-auto p-4">
         <div className="bg-white shadow-lg rounded-lg overflow-hidden">
           <div className={`flex items-center justify-between px-6 py-3 ${abscentChecker.months.indexOf(month+1)+1 >0 && abscentChecker.years.indexOf(year)+1 >0 ? "bg-red-700": "bg-gray-700"}`}>
             <button onClick={prevMonth} id="prevMonth" className="text-white text-sm md:text-xl">

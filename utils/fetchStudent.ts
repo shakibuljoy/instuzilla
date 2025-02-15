@@ -33,11 +33,19 @@ export async function getStudentInfo(id: string) {
     return response;
 }
 
-export async function fetchClasses() {
+export async function fetchClasses(instu_id:string | undefined ='',authenticated:boolean | undefined = false) {
     
     const fullUrl = `${baseUrl}/api/klasses?instu_id=${instu_id}`;
-    const response = await publicRequest(fullUrl);
-    return response;
+    if(authenticated){
+        const response = await simpleGETrequest(fullUrl);
+        return response;
+    }
+    else{
+        const response = await publicRequest(fullUrl);
+        return response;
+    }
+
+    
 }
 
 export async function getStudentImage(imageUrl: string) {

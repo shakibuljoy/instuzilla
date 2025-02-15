@@ -24,6 +24,7 @@ export default function Page({params}:{params:{id:string}}) {
   const [api, setApi] = React.useState<CarouselApi>()
   const [current, setCurrent] = React.useState(0)
   const [count, setCount] = React.useState(0)
+  const [loading, setLoading] = React.useState(false);
   const [attendenceList, setAttendenceList] = React.useState<SingleAttend[] | []>([]);
   const studentList = useStudentList(params.id);
   const {toast} = useToast();
@@ -52,9 +53,10 @@ export default function Page({params}:{params:{id:string}}) {
 
 
   const submitAttendence = async () => {
-    console.log("Attendence", attendenceList);
     if (attendenceList.length === studentList?.length) {
+      
       try {
+        setLoading(true);
         const response = await fetchAttendence(params.id, attendenceList)
         if (response) {
           toast({
@@ -71,6 +73,8 @@ export default function Page({params}:{params:{id:string}}) {
           title: "Error",
           description: error.message
         })
+      }finally{
+        setLoading(false);
       }
     }else{
       toast({
@@ -92,7 +96,7 @@ export default function Page({params}:{params:{id:string}}) {
   return (
     <div className="m-auto">
       <Button className="m-12" onClick={submitAttendence} >
-        Submit Attendence
+       {loading ? "Submitting..." : "Submit Attendence"}
       </Button>
       <Carousel setApi={setApi} className="w-full max-w-xs">
         <CarouselContent>
