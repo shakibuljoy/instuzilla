@@ -2,7 +2,7 @@ import AuthContext from '@/app/context/AuthContext';
 import { useToast } from '@/components/ui/use-toast';
 import { Klasses } from '@/lib/TypeOF';
 import { fetchClasses } from '@/utils/fetchStudent';
-import React, { useContext, useEffect, useState } from 'react'; // Assuming React usage
+import React, { cache, useContext, useEffect, useState } from 'react'; // Assuming React usage
 
 
 
@@ -44,7 +44,7 @@ export default function useFetchClasses() {
     };
 
     getClasses();
-  }, []);
+  }, [user]);
 
   return {classes, classObject};
 }

@@ -1,6 +1,6 @@
 'use server'
 import { cookies } from "next/headers";
-export async function publicRequest(baseUrl: string){
+export async function publicRequest(baseUrl: string, cacheData: 'no-store' | 'default' = 'default'){
           try {
                 const response = await fetch(baseUrl, {
                     method: "GET",
@@ -8,6 +8,7 @@ export async function publicRequest(baseUrl: string){
                     headers: {
                         'Content-Type': 'application/json'
                     },
+                    cache: cacheData
                 });
             
     
@@ -84,7 +85,7 @@ export async function publicGetRequest(baseUrl: string){
 }
 
 
-export async function simpleGETrequest(baseUrl: string){
+export async function simpleGETrequest(baseUrl: string, cacheData: 'no-store' | 'default' = 'default'){
     const cookieStore = cookies();
     const token = cookieStore.get('token')?.value || null;
     if (token){
@@ -95,8 +96,8 @@ export async function simpleGETrequest(baseUrl: string){
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 },
+                cache: cacheData
             });
-    
             if(response.ok && response.status === 200){
                 const data = await response.json();
                 return data;

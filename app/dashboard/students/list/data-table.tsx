@@ -49,9 +49,6 @@ export function DataTable<TData, TValue>({
 
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({
-      mobile: false,
-      email: false,
-      user: false,
       account_created: false,
     });
 

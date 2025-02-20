@@ -1,6 +1,7 @@
 "use server"
 import { cookies } from "next/headers";
 import { formDataSubmit, getProtectedImage, publicFormDataSubmit, publicGetRequest, publicRequest, simpleGETrequest, simplePOSTrequest } from "./commonFetch";
+import { cache } from "react";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL;
 const instu_id = 'uphsc';
@@ -37,11 +38,11 @@ export async function fetchClasses(instu_id:string | undefined ='',authenticated
     
     const fullUrl = `${baseUrl}/api/klasses?instu_id=${instu_id}`;
     if(authenticated){
-        const response = await simpleGETrequest(fullUrl);
+        const response = await simpleGETrequest(fullUrl, 'no-store');
         return response;
     }
     else{
-        const response = await publicRequest(fullUrl);
+        const response = await publicRequest(fullUrl, 'no-store');
         return response;
     }
 

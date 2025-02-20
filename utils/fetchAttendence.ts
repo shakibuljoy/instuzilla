@@ -104,10 +104,7 @@ export async function fetchAttendence( id:string, formData?: SingleAttend[], dat
                     if (error.detail) {
                         throw new Error(error.detail)
                     } else {
-                        // Handle field-specific errors
-                        Object.keys(error).forEach((field) => {
-                            throw new Error(`${error[field].join(' ')}`)
-                        });
+                        throw new Error("Something Went wrong!")
                     }
                 }
             }else{
@@ -134,16 +131,17 @@ export async function fetchAttendence( id:string, formData?: SingleAttend[], dat
                     if (error.detail) {
                         throw new Error(error.detail)
                     } else {
-                        // Handle field-specific errors
-                        Object.keys(error).forEach((field) => {
-                            throw new Error(`${error[field].join(' ')}`)
-                        });
+                        throw new Error("Server connection failed")
                     }
                 }
             }
            
         }catch(error:any){
-            throw new Error(error.message || "Server connection failed")
+            if (error.message) {
+                throw new Error(error.message)
+            } else {
+                throw new Error("Something Went Wrong!")
+            }
             }
         
     }
