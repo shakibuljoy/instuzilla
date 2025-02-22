@@ -18,13 +18,13 @@ export async function getStudentList(klass_id?: string) {
         });
         if (!response.ok) {
             const error = await response.json();
-            throw new Error(error.detail);
+            return {error: error.detail || "An error occurred"};
         } else if (response.ok && response.status === 200) {
             const data = await response.json();
-            return data;
+            return {success: data};
         }
     } catch (error: any) {
-        throw new Error(error.message);
+        return {error: error.message || "Server connection failed"};
     }
 }
 

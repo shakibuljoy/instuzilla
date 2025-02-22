@@ -58,7 +58,7 @@ export default function Page({params}:{params:{id:string}}) {
       try {
         setLoading(true);
         const response = await fetchAttendence(params.id, attendenceList)
-        if (response) {
+        if (response.success) {
           toast({
             variant:'default',
             title: "Success",
@@ -66,6 +66,12 @@ export default function Page({params}:{params:{id:string}}) {
           })
 
           router.push(`/dashboard/attendence/list`);
+        }else{
+          toast({
+            variant:'destructive',
+            title: "Error",
+            description: response.error
+          })
         }
       } catch (error: any) {
         toast({

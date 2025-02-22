@@ -23,9 +23,9 @@ export default function useFetchClasses() {
           klasses = await fetchClasses();
         }
         
-        if (klasses instanceof Array) { // Type guard for klasses as array
-          setClassObject(klasses);
-          const data = klasses.map((klass: Klasses) => `${klass.full_klass}`);
+        if (klasses.success instanceof Array) { // Type guard for klasses as array
+          setClassObject(klasses.success);
+          const data = klasses.success.map((klass: Klasses) => `${klass.full_klass}`);
           setClasses(data);
         } else {
           setClasses([])

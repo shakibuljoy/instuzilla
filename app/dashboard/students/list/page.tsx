@@ -22,11 +22,18 @@ export default function Page() {
       setLoading(true);
       try{
         const data = await getStudentList();
-      if(data as studentInfo[]){
-        setStudentList(data)
+      if(data?.success as studentInfo[]){
+        setStudentList(data?.success)
         setOpen(false);
+      }else if(data?.error){
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: data.error
+        })
       }else{
         setStudentList(null);
+        
       }
 
       }catch(error:any){

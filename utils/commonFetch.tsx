@@ -1,29 +1,20 @@
 'use server'
 import { cookies } from "next/headers";
 
-class ClientError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "ClientError";
-  }
-}
-
 async function handleResponse(response: Response) {
   if (response.ok) {
     const data = await response.json();
-    return data;
+    return { success: data };
   } else {
     const error = await response.json();
     console.error('Error response:', error);
     if (error.detail) {
-      throw new ClientError(error.detail);
+      return { error: error.detail };
     } else {
       // Handle field-specific errors
-      Object.keys(error).forEach((field) => {
-        throw new ClientError(`${error[field].join(' ')}`);
-      });
+      const errorMessage = Object.keys(error).map((field) => `${error[field].join(' ')}`).join(' ');
+      return { error: errorMessage || "An error occurred" };
     }
-    throw new ClientError("An error occurred");
   }
 }
 
@@ -39,7 +30,7 @@ export async function publicRequest(baseUrl: string, cacheData: 'no-store' | 'de
     return await handleResponse(response);
   } catch (error: any) {
     console.error('Error in publicRequest:', error);
-    throw new ClientError(error.message || "Server connection failed");
+    return { error: error.message || "Server connection failed" };
   }
 }
 
@@ -54,7 +45,7 @@ export async function publicGetRequest(baseUrl: string) {
     return await handleResponse(response);
   } catch (error: any) {
     console.error('Error in publicGetRequest:', error);
-    throw new ClientError(error.message || "Server connection failed");
+    return { error: error.message || "Server connection failed" };
   }
 }
 
@@ -74,10 +65,10 @@ export async function simpleGETrequest(baseUrl: string, cacheData: 'no-store' | 
       return await handleResponse(response);
     } catch (error: any) {
       console.error('Error in simpleGETrequest:', error);
-      throw new ClientError(error.message || "Server connection failed");
+      return { error: error.message || "Server connection failed" };
     }
   } else {
-    throw new ClientError('Token not found');
+    return { error: 'Token not found' };
   }
 }
 
@@ -97,10 +88,10 @@ export async function simplePOSTrequest(baseUrl: string, data: object) {
       return await handleResponse(response);
     } catch (error: any) {
       console.error('Error in simplePOSTrequest:', error);
-      throw new ClientError(error.message || "Server connection failed");
+      return { error: error.message || "Server connection failed" };
     }
   } else {
-    throw new ClientError('Token not found');
+    return { error: 'Token not found' };
   }
 }
 
@@ -113,7 +104,7 @@ export async function publicFormDataSubmit(baseUrl: string, formData: FormData, 
     return await handleResponse(response);
   } catch (error: any) {
     console.error('Error in publicFormDataSubmit:', error);
-    throw new ClientError(error.message || 'An error occurred');
+    return { error: error.message || 'An error occurred' };
   }
 }
 
@@ -133,10 +124,10 @@ export async function formDataSubmit(baseUrl: string, formData: FormData, reques
       return await handleResponse(response);
     } catch (error: any) {
       console.error('Error in formDataSubmit:', error);
-      throw new ClientError(error.message || 'An error occurred');
+      return { error: error.message || 'An error occurred' };
     }
   } else {
-    throw new ClientError('Token not found');
+    return { error: 'Token not found' };
   }
 }
 
@@ -152,14 +143,14 @@ export async function getProtectedImage(imageUrl: string) {
     });
     if (!response.ok) {
       const error = await response.json();
-      throw new ClientError(error.detail);
+      return { error: error.detail };
     }
 
     const data = await response.json();
-    return data.image_url;
+    return { success: data.image_url };
 
   } catch (error: any) {
     console.error('Error in getProtectedImage:', error);
-    throw new ClientError(error.message || 'An error occurred');
+    return { error: error.message || 'An error occurred' };
   }
 }

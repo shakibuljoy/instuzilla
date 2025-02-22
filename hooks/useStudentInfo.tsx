@@ -19,10 +19,18 @@ export default function useStudentInfo(id:string) {
       setLoading(true);
       setError("")
       try {
-        const studentResponse = await getStudentInfo(id)
-        if (studentResponse) {
-          setStudent(studentResponse)
+        const data = await getStudentInfo(id)
+        if (data.success) {
+          setStudent(data.success)
           setLoading(false);
+        }else{
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: data.error
+          })
+          setError(data.error)
+          setLoading(false)
         }
       } catch (error: any) {
         toast({
@@ -44,9 +52,11 @@ export default function useStudentInfo(id:string) {
     const getImage = async (imageUrl: string) => {
       setError("")
       try {
-        const imageResponse = await getStudentImage(imageUrl)
-        if (imageResponse) {
-          setImageUrl(imageResponse)
+        const data = await getStudentImage(imageUrl)
+        if (data.success ) {
+          setImageUrl(data.success)
+        }else{
+          setError(data.error)
         }
       } catch (error: any) {
         setError(error.message)

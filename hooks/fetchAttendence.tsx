@@ -11,10 +11,15 @@ export default function useFetchAttendence(klass_id:string | null, date?:string)
     const getAttendence = async (klass_id: string, date?:string) => {
       setLoading(true);
       try{
-        const attendence = await fetchAttendence(klass_id,undefined, date)
-      if(attendence){
-        setAttendenceList(attendence)
-        console.log(attendence);
+        const data = await fetchAttendence(klass_id,undefined, date)
+      if(data.success){
+        setAttendenceList(data.success)
+      }else{
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: data.error
+        })
       }
       }catch(error:any){
         toast({
@@ -53,9 +58,15 @@ export function useStudentAttendance(id:string, month:number, year:string) {
   const getAttendence = async (id:string, month:number, year:string) => {
     
     try{
-      const attendence = await fetchStudentAttendance(id,month,year)
-    if(attendence){
-      setAttendenceList(attendence)
+      const data = await fetchStudentAttendance(id,month,year)
+    if(data.success){
+      setAttendenceList(data.success)
+    }else{
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: data.error
+      })
     }
     }catch(error:any){
       toast({

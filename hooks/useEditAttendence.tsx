@@ -12,9 +12,15 @@ export default function useEditAttendence(attendec_id:string | null) {
       if(attendec_id){
         const getAttendence = async () => {
           try{
-            const attendence = await fetchEditAttendence(attendec_id)
-          if(attendence){
-            setAttendence(attendence)
+            const data = await fetchEditAttendence(attendec_id)
+          if(data.success){
+            setAttendence(data.success)
+          }else{
+            toast({
+              variant: 'destructive',
+              title: 'Error',
+              description: data.error
+            })
           }
           }catch(error:any){
             toast({

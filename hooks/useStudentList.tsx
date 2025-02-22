@@ -12,8 +12,8 @@ export default function useStudentList(klass_id?:string) {
         const getData = async () => {
           try{
             const data = await getStudentList(klass_id && klass_id);
-          if(data as studentInfo[]){
-            setStudentList(data)
+          if(data?.success as studentInfo[]){
+            setStudentList(data?.success)
           }else{
             setStudentList(null);
           }

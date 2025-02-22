@@ -12,9 +12,15 @@ export default function useFetchBill(student_id:string) {
       setLoading(true);
       
       try{
-        const bills = await fetchStudentBill(student_id)
-      if(bills){
-        setBillList(bills)
+        const data = await fetchStudentBill(student_id)
+      if(data.success){
+        setBillList(data.success)
+      }else{
+        toast({
+          variant: 'destructive',
+          title: 'Error',
+          description: data.error
+        })
       }
       }catch(error:any){
         toast({
@@ -56,9 +62,15 @@ export function useIndiBill(bill_id:string) {
   const getIndiBill = async (bill_id:string) => {
     
     try{
-      const bill = await fetchIndiBill(bill_id)
-    if(bill){
-      setBill(bill)
+      const data = await fetchIndiBill(bill_id)
+    if(data.success){
+      setBill(data.success) 
+    }else{
+      toast({
+        variant: 'destructive',
+        title: 'Error',
+        description: data.error
+      })
     }
     }catch(error:any){
       toast({
@@ -94,9 +106,9 @@ export function useFetchUserCreatedPayment() {
     setLoading(true);
     
     try{
-      const payments = await fetchUserCreatedPayment()
-    if(payments){
-      setPaymentList(payments)
+      const data = await fetchUserCreatedPayment()
+    if(data.success){
+      setPaymentList(data.success)
     }
     }catch(error:any){
       toast({
