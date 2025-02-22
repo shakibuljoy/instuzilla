@@ -26,14 +26,20 @@ export default function PyamentCard({bills, children}:{bills:Record<string, any>
     const paymentHandler = async (bill_details:PaymentSchema) => {
       if(bill_details){
         try{
-          const postPayment = await makePayment(bill_details)
-          if(postPayment){
+          const data = await makePayment(bill_details)
+          if(data.success){
             toast({
-              title: postPayment.status,
+              title: data.success.status,
               variant: 'default',
-              description: postPayment.status === 'success' ? `Successfully Paid ${postPayment.paid_amount}`: "Try Again Later!"
+              description: data.success.status === 'success' ? `Successfully Paid ${data.success.paid_amount}`: "Try Again Later!"
             })
             
+          }else{
+            toast({
+              title: "Payment Failed",
+              variant: 'destructive',
+              description: data.error
+            })
           }
         }catch(err:any){
           toast({

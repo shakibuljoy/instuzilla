@@ -43,7 +43,7 @@ export default function SearchTable<TData>({ table }: SearchTableProps<TData>) {
           <SelectGroup>
             <SelectLabel>Search By</SelectLabel>
             {table.getAllColumns().map((column) => (
-             column.id !== ('actions' || 'select') && column.getCanFilter() && (
+             column.id !== 'actions' && column.id !== 'select' && column.getCanFilter() && (
                 <SelectItem key={column.id} value={column.id}>
                 
                 {getMeta(column)}
