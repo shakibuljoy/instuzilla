@@ -37,19 +37,24 @@ export default function AttendenceEdit({attendence_id, children}:{attendence_id:
         formData.append('presents', presents);
           try {
             const response = await fetchEditAttendence(attendence_id, formData)
-            if (response) {
-                setAttendence(response)
+            if (response.success) {
+                setAttendence(response.success)
                 setCause(attendence?.cause || '')
                 setPresents(attendence?.presents.toString() || "false")
-            }
+            }else{
+              toast({
+                variant:'destructive',
+                title: "Error",
+                description: response.error
+              
+            })
+          }
           } catch (error: any) {
             toast({
               variant:'destructive',
               title: "Error",
               description: error.message
             })
-          }finally{
-            router.push(`/dashboard/attendence/list/?klass=${attendence?.klass}`);
           }
       }
   return (
