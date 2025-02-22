@@ -27,8 +27,14 @@ export default function Page({ params }: { params: { id: string } }) {
   const getField = async () => {
     try {
       const response = await subjectList(params.id);
-      if (response) {
-        setSubjectField(response);
+      if (response.success) {
+        setSubjectField(response.success);
+      }else if(response.error){
+        toast({
+          title: "Heads Up!",
+          description: response.error,
+          variant: "destructive",
+        });
       } else {
         setSubjectField([]);
       }

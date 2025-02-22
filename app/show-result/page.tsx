@@ -32,8 +32,14 @@ export default function Page() {
     }
     try {
       const response = await markSheet(studentId,classId);
-      if (response) {
-        setResult(response);
+      if (response.success) {
+        setResult(response.success);
+      }else if(response.error){
+        toast({
+          title: "Failure",
+          description: response.error,
+          variant: "destructive",
+        });
       }
     } catch (error: any) {
       console.log("Error in getMarks");

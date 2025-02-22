@@ -87,7 +87,20 @@ export default function Page() {
   const loadClasses = async () => {
     try {
       const response = await fetchClasses();
-      setClasses(response);
+      if(response.success){
+
+        setClasses(response.success);
+      }else if(response.error){
+        setClasses(null);
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: response.error,
+        });
+      }
+      else{
+        setClasses(null);
+      }
     } catch (error: any) {
       toast({
         variant: "destructive",
@@ -151,7 +164,7 @@ export default function Page() {
 
     try {
       const data = await registerStudent(formData);
-      if (data) {
+      if (data.success) {
         toast({
           variant: "default",
           title: "Success!",
@@ -159,7 +172,13 @@ export default function Page() {
         });
         form.reset(defaultData);
         setSelectedImage(null);
-        router.push(`/students/${data.id}/additional-info`)
+        router.push(`/students/${data.success.id}/additional-info`)
+      }else if(data.error){
+        toast({
+          variant: "destructive",
+          title: "Error",
+          description: data.error,
+        });
       }
     } catch (error: any) {
       toast({

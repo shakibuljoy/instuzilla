@@ -30,9 +30,16 @@ export default function Page({ params }: { params: { id: string } }) {
   const getField = async () => {
     try {
       const response = await addStudentField();
-      if (response) {
-        setInfoField(response);
-      } else {
+      if (response.success) {
+        setInfoField(response.success);
+      }else if(response.error){
+        toast({
+          title: "Heads Up!",
+          description: response.error,
+          variant: "destructive",
+        });
+      }
+       else {
         setInfoField([]);
       }
     } catch (error: any) {
