@@ -28,21 +28,20 @@ export default function OnlinePayamentCard({bills, children}:{bills:Record<strin
     const paymentHandler = async (bill_details:PaymentSchema) => {
       if(bill_details){
         try{
-          const postPayment = await initiateOnlinePayment(bill_details)
-          console.log("postPayment", postPayment)
-          if(postPayment.payment_url){
+          const data = await initiateOnlinePayment(bill_details)
+          if(data.success.payment_url){
             toast({
-              title: postPayment.status,
+              title: data.success.status,
               variant: 'default',
               description: "Redirecting to Payment Gateway"
             })
 
-            router.push(postPayment.payment_url)            
+            router.push(data.success.payment_url)            
           }else{
             toast({
               title: "Payment Failed",
               variant: 'destructive',
-              description: postPayment.detail
+              description: data.success.detail
             })
           }
         }catch(err:any){
