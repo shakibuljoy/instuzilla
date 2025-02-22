@@ -32,7 +32,7 @@ export default function UserCreation({
     if (student_id) {
       try {
         const response = await createUserStudent(student_id);
-        if (response) {
+        if (response.success) {
           toast({
             title: "User Account Created",
             description: "A user account has been created for the student",

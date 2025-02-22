@@ -79,9 +79,16 @@ export default function StudentRegisterForm({ instance = null, instance_image = 
     const getClasses = async () => {
       try {
         const response = await fetchClasses();
-        if (response) {
+        if (response.success) {
           
-          setClasses(response);
+          setClasses(response.success);
+        }else{
+          toast({
+            variant: 'destructive',
+            title: 'Error',
+            description: response.error,
+          });
+          setClasses(null);
         }
       } catch (error: any) {
         toast({
